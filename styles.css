@@ -1984,6 +1984,37 @@ body.no-scroll {
     box-shadow: var(--shadow-green);
 }
 
+/* Estilos para métodos de pago */
+#paymentMethodCard,
+#paymentMethodTransfer {
+    transition: all 0.3s ease;
+}
+
+#paymentMethodCard:hover,
+#paymentMethodTransfer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#paymentMethodCard input[type="radio"]:checked + div,
+#paymentMethodTransfer input[type="radio"]:checked + div {
+    color: var(--text-primary);
+}
+
+/* Estilos responsivos para métodos de pago */
+@media (max-width: 768px) {
+    #paymentMethodCard,
+    #paymentMethodTransfer {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    #paymentMethodCard i,
+    #paymentMethodTransfer i {
+        font-size: 18px;
+    }
+}
+
 /* Ticket Display */
 .ticket-modal-content {
     max-width: 500px;

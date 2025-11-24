@@ -923,12 +923,17 @@ function switchAuthMode(mode) {
 
 // Show Payment Modal
 function showPaymentModal() {
-    const modal = document.getElementById('eventModal');
-    const modalBody = document.getElementById('modalBody');
+    // Cerrar el carrito antes de mostrar el modal de pago
+    closeCart();
     
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
-    
-    modalBody.innerHTML = `
+    // Pequeño delay para asegurar que el carrito se cierre antes de mostrar el modal
+    setTimeout(() => {
+        const modal = document.getElementById('eventModal');
+        const modalBody = document.getElementById('modalBody');
+        
+        const total = cart.reduce((sum, item) => sum + item.price, 0);
+        
+        modalBody.innerHTML = `
         <div class="event-detail-content" style="padding: 60px 40px;">
             <div style="text-align: center; margin-bottom: 32px;">
                 <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #00B894 0%, #00D2D3 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: white; font-size: 40px;">
@@ -949,35 +954,118 @@ function showPaymentModal() {
             </div>
             
             <form id="paymentForm" onsubmit="processPayment(event)" style="max-width: 500px; margin: 0 auto;">
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Número de Tarjeta</label>
-                    <input type="text" id="cardNumber" required pattern="[0-9]{16}" maxlength="16" style="width: 100%; padding: 14px; border: 2px solid var(--bg-color); border-radius: 8px; font-size: 16px; font-family: monospace;" placeholder="1234567812345678" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--bg-color)'">
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                    <div>
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Fecha Expiración</label>
-                        <input type="text" id="cardExpiry" required pattern="(0[1-9]|1[0-2])\/[0-9]{2}" maxlength="5" style="width: 100%; padding: 14px; border: 2px solid var(--bg-color); border-radius: 8px; font-size: 16px; font-family: monospace;" placeholder="MM/YY" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--bg-color)'">
+                <!-- Selector de método de pago -->
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 12px; font-weight: 600; font-size: 16px;">Método de Pago</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.3s; background: var(--input-bg);" id="paymentMethodCard" onclick="switchPaymentMethod('card')">
+                            <input type="radio" name="paymentMethod" value="card" checked style="width: 20px; height: 20px; cursor: pointer;" onchange="switchPaymentMethod('card')">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                    <i class="fas fa-credit-card" style="color: var(--primary-color); font-size: 20px;"></i>
+                                    <span style="font-weight: 600;">Tarjeta</span>
+                                </div>
+                                <span style="font-size: 12px; color: var(--text-secondary);">Débito/Crédito</span>
+                            </div>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; padding: 16px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.3s; background: var(--input-bg);" id="paymentMethodTransfer" onclick="switchPaymentMethod('transfer')">
+                            <input type="radio" name="paymentMethod" value="transfer" style="width: 20px; height: 20px; cursor: pointer;" onchange="switchPaymentMethod('transfer')">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                    <i class="fas fa-university" style="color: var(--secondary-color); font-size: 20px;"></i>
+                                    <span style="font-weight: 600;">Transferencia</span>
+                                </div>
+                                <span style="font-size: 12px; color: var(--text-secondary);">Bancaria</span>
+                            </div>
+                        </label>
                     </div>
-                    <div>
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">CVV</label>
-                        <input type="text" id="cardCVV" required pattern="[0-9]{3,4}" maxlength="4" style="width: 100%; padding: 14px; border: 2px solid var(--bg-color); border-radius: 8px; font-size: 16px; font-family: monospace;" placeholder="123" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--bg-color)'">
+                </div>
+                
+                <!-- Formulario de Tarjeta -->
+                <div id="cardPaymentForm">
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Número de Tarjeta</label>
+                        <input type="text" id="cardNumber" name="cardNumber" pattern="[0-9]{16}" maxlength="16" style="width: 100%; padding: 14px; border: 2px solid var(--bg-color); border-radius: 8px; font-size: 16px; font-family: monospace; background: var(--input-bg); color: var(--text-primary);" placeholder="1234567812345678" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--bg-color)'">
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Fecha Expiración</label>
+                            <input type="text" id="cardExpiry" name="cardExpiry" pattern="(0[1-9]|1[0-2])\/[0-9]{2}" maxlength="5" style="width: 100%; padding: 14px; border: 2px solid var(--bg-color); border-radius: 8px; font-size: 16px; font-family: monospace; background: var(--input-bg); color: var(--text-primary);" placeholder="MM/YY" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--bg-color)'">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">CVV</label>
+                            <input type="text" id="cardCVV" name="cardCVV" pattern="[0-9]{3,4}" maxlength="4" style="width: 100%; padding: 14px; border: 2px solid var(--bg-color); border-radius: 8px; font-size: 16px; font-family: monospace; background: var(--input-bg); color: var(--text-primary);" placeholder="123" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--bg-color)'">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Nombre en la Tarjeta</label>
+                        <input type="text" id="cardName" name="cardName" style="width: 100%; padding: 14px; border: 2px solid var(--bg-color); border-radius: 8px; font-size: 16px; background: var(--input-bg); color: var(--text-primary);" placeholder="JUAN PEREZ" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--bg-color)'">
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 24px; padding: 16px; background: #E8F5E9; border-radius: 8px;">
+                        <i class="fas fa-lock" style="color: #00B894; font-size: 20px;"></i>
+                        <span style="font-size: 14px; color: #2D3436;">Pago seguro encriptado SSL</span>
                     </div>
                 </div>
                 
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Nombre en la Tarjeta</label>
-                    <input type="text" id="cardName" required style="width: 100%; padding: 14px; border: 2px solid var(--bg-color); border-radius: 8px; font-size: 16px;" placeholder="JUAN PEREZ" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--bg-color)'">
+                <!-- Formulario de Transferencia -->
+                <div id="transferPaymentForm" style="display: none;">
+                    <div style="background: var(--input-bg); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 2px solid var(--secondary-color);">
+                        <h4 style="margin-bottom: 16px; color: var(--secondary-color); display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-info-circle"></i>
+                            Datos para Transferencia
+                        </h4>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div>
+                                <span style="font-size: 12px; color: var(--text-secondary);">Banco:</span>
+                                <p style="font-weight: 600; margin: 4px 0;">Banco Santander</p>
+                            </div>
+                            <div>
+                                <span style="font-size: 12px; color: var(--text-secondary);">CBU/Alias:</span>
+                                <p style="font-weight: 600; margin: 4px 0; font-family: monospace; font-size: 18px; color: var(--primary-color);">0000123456789012345678</p>
+                            </div>
+                            <div>
+                                <span style="font-size: 12px; color: var(--text-secondary);">Titular:</span>
+                                <p style="font-weight: 600; margin: 4px 0;">PassTo Eventos S.A.</p>
+                            </div>
+                            <div>
+                                <span style="font-size: 12px; color: var(--text-secondary);">Monto a transferir:</span>
+                                <p style="font-weight: 600; margin: 4px 0; font-size: 20px; color: var(--accent-vip);">$${total.toFixed(2)}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #FFF3CD; padding: 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #FFC107;">
+                        <div style="display: flex; gap: 12px; align-items: start;">
+                            <i class="fas fa-exclamation-triangle" style="color: #FFC107; font-size: 20px; margin-top: 2px;"></i>
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 4px; color: #856404;">Importante</p>
+                                <p style="font-size: 13px; color: #856404; margin: 0;">Una vez realizada la transferencia, sube el comprobante. Las entradas se activarán después de verificar el pago (puede tardar hasta 24 horas).</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Número de Operación/Transacción</label>
+                        <input type="text" id="transferNumber" name="transferNumber" style="width: 100%; padding: 14px; border: 2px solid var(--bg-color); border-radius: 8px; font-size: 16px; background: var(--input-bg); color: var(--text-primary);" placeholder="Ingresa el número de operación" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--bg-color)'">
+                        <small style="display: block; margin-top: 6px; color: var(--text-secondary); font-size: 12px;">Este número aparece en el comprobante de transferencia</small>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Comprobante de Transferencia (Opcional)</label>
+                        <input type="file" id="transferReceipt" name="transferReceipt" accept="image/*,.pdf" style="width: 100%; padding: 14px; border: 2px solid var(--bg-color); border-radius: 8px; font-size: 14px; background: var(--input-bg); color: var(--text-primary); cursor: pointer;" onchange="handleReceiptUpload(event)">
+                        <small style="display: block; margin-top: 6px; color: var(--text-secondary); font-size: 12px;">Sube una imagen o PDF del comprobante</small>
+                        <div id="receiptPreview" style="margin-top: 12px; display: none;">
+                            <img id="receiptPreviewImg" style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 2px solid var(--border-color);" alt="Vista previa del comprobante">
+                        </div>
+                    </div>
                 </div>
                 
-                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 24px; padding: 16px; background: #E8F5E9; border-radius: 8px;">
-                    <i class="fas fa-lock" style="color: #00B894; font-size: 20px;"></i>
-                    <span style="font-size: 14px; color: #2D3436;">Pago seguro encriptado SSL</span>
-                </div>
-                
-                <button type="submit" class="btn-primary" style="width: 100%; padding: 16px; font-size: 16px; background: var(--secondary-color);">
+                <button type="submit" class="btn-primary" id="submitPaymentBtn" style="width: 100%; padding: 16px; font-size: 16px; background: var(--secondary-color);">
                     <i class="fas fa-lock"></i>
-                    Pagar $${total.toFixed(2)}
+                    <span id="submitPaymentText">Pagar $${total.toFixed(2)}</span>
                 </button>
                 
                 <button type="button" onclick="closeEventModal()" style="width: 100%; padding: 16px; font-size: 16px; background: transparent; border: 2px solid var(--bg-color); border-radius: 8px; margin-top: 12px; cursor: pointer; font-weight: 600; color: var(--text-secondary);">
@@ -987,19 +1075,154 @@ function showPaymentModal() {
         </div>
     `;
     
-    modal.classList.add('active');
+        modal.classList.add('active');
+        // Asegurar que el modal esté por encima de todo
+        modal.style.zIndex = '4000';
+        
+        // Inicializar el método de pago por defecto (tarjeta)
+        setTimeout(() => {
+            if (document.getElementById('cardPaymentForm')) {
+                switchPaymentMethod('card');
+            }
+        }, 150);
+    }, 100);
+}
+
+// Switch Payment Method
+function switchPaymentMethod(method) {
+    const cardForm = document.getElementById('cardPaymentForm');
+    const transferForm = document.getElementById('transferPaymentForm');
+    const cardRadio = document.querySelector('input[value="card"]');
+    const transferRadio = document.querySelector('input[value="transfer"]');
+    const cardLabel = document.getElementById('paymentMethodCard');
+    const transferLabel = document.getElementById('paymentMethodTransfer');
+    const submitBtn = document.getElementById('submitPaymentBtn');
+    const submitText = document.getElementById('submitPaymentText');
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    
+    if (method === 'card') {
+        cardForm.style.display = 'block';
+        transferForm.style.display = 'none';
+        cardRadio.checked = true;
+        transferRadio.checked = false;
+        cardLabel.style.borderColor = 'var(--primary-color)';
+        cardLabel.style.background = 'rgba(44, 140, 251, 0.1)';
+        transferLabel.style.borderColor = 'var(--border-color)';
+        transferLabel.style.background = 'var(--input-bg)';
+        
+        // Hacer campos de tarjeta requeridos
+        document.getElementById('cardNumber').required = true;
+        document.getElementById('cardExpiry').required = true;
+        document.getElementById('cardCVV').required = true;
+        document.getElementById('cardName').required = true;
+        
+        // Hacer campos de transferencia no requeridos
+        document.getElementById('transferNumber').required = false;
+        document.getElementById('transferReceipt').required = false;
+        
+        submitText.textContent = `Pagar $${total.toFixed(2)}`;
+    } else {
+        cardForm.style.display = 'none';
+        transferForm.style.display = 'block';
+        cardRadio.checked = false;
+        transferRadio.checked = true;
+        transferLabel.style.borderColor = 'var(--secondary-color)';
+        transferLabel.style.background = 'rgba(109, 203, 90, 0.1)';
+        cardLabel.style.borderColor = 'var(--border-color)';
+        cardLabel.style.background = 'var(--input-bg)';
+        
+        // Hacer campos de tarjeta no requeridos
+        document.getElementById('cardNumber').required = false;
+        document.getElementById('cardExpiry').required = false;
+        document.getElementById('cardCVV').required = false;
+        document.getElementById('cardName').required = false;
+        
+        // Hacer campos de transferencia requeridos
+        document.getElementById('transferNumber').required = true;
+        
+        submitText.textContent = `Confirmar Transferencia $${total.toFixed(2)}`;
+    }
+}
+
+// Handle Receipt Upload
+function handleReceiptUpload(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('receiptPreview');
+    const previewImg = document.getElementById('receiptPreviewImg');
+    
+    if (file) {
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else if (file.type === 'application/pdf') {
+            previewImg.style.display = 'none';
+            preview.innerHTML = `
+                <div style="padding: 20px; background: var(--input-bg); border-radius: 8px; text-align: center;">
+                    <i class="fas fa-file-pdf" style="font-size: 48px; color: var(--primary-color); margin-bottom: 8px;"></i>
+                    <p style="margin: 0; font-weight: 600;">${file.name}</p>
+                    <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-secondary);">PDF cargado correctamente</p>
+                </div>
+            `;
+            preview.style.display = 'block';
+        }
+    } else {
+        preview.style.display = 'none';
+    }
 }
 
 // Process Payment
 function processPayment(event) {
     event.preventDefault();
     
+    const form = event.target;
+    const paymentMethod = form.querySelector('input[name="paymentMethod"]:checked').value;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const submitText = document.getElementById('submitPaymentText');
+    
+    // Validar según el método de pago
+    if (paymentMethod === 'card') {
+        const cardNumber = document.getElementById('cardNumber').value;
+        const cardExpiry = document.getElementById('cardExpiry').value;
+        const cardCVV = document.getElementById('cardCVV').value;
+        const cardName = document.getElementById('cardName').value;
+        
+        if (!cardNumber || !cardExpiry || !cardCVV || !cardName) {
+            showNotification('Por favor completa todos los datos de la tarjeta', 'error');
+            return;
+        }
+        
+        if (cardNumber.length !== 16) {
+            showNotification('El número de tarjeta debe tener 16 dígitos', 'error');
+            return;
+        }
+    } else if (paymentMethod === 'transfer') {
+        const transferNumber = document.getElementById('transferNumber').value;
+        
+        if (!transferNumber) {
+            showNotification('Por favor ingresa el número de operación', 'error');
+            return;
+        }
+    }
+    
     // Simulate payment processing
-    const submitBtn = event.target.querySelector('button[type="submit"]');
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
     submitBtn.disabled = true;
     
     setTimeout(() => {
+        const paymentMethod = form.querySelector('input[name="paymentMethod"]:checked').value;
+        let ticketStatus = 'active';
+        let notificationMessage = '¡Compra realizada con éxito!';
+        
+        // Si es transferencia, las entradas quedan pendientes
+        if (paymentMethod === 'transfer') {
+            ticketStatus = 'pending';
+            notificationMessage = '¡Solicitud de compra registrada! Las entradas se activarán una vez verificado el pago (puede tardar hasta 24 horas).';
+        }
+        
         // Payment successful - generate tickets
         const purchasedTickets = cart.map(item => ({
             ...item,
@@ -1008,14 +1231,18 @@ function processPayment(event) {
             email: currentUser ? currentUser.email : null,
             userName: currentUser ? currentUser.name : null,
             qrData: null,
-            status: 'active' // Estado inicial: activo
+            status: ticketStatus,
+            paymentMethod: paymentMethod,
+            transferNumber: paymentMethod === 'transfer' ? document.getElementById('transferNumber').value : null
         }));
         
         myTickets.push(...purchasedTickets);
         setMyTickets(myTickets);
         
-        // Actualizar contadores de ventas en los eventos
-        updateEventSalesCounters(cart);
+        // Actualizar contadores de ventas en los eventos (solo si el pago fue aprobado)
+        if (paymentMethod === 'card') {
+            updateEventSalesCounters(cart);
+        }
         
         // Clear cart
         setCart([]);
@@ -1024,15 +1251,17 @@ function processPayment(event) {
         closeCart();
         closeEventModal();
         
-        showNotification('¡Compra realizada con éxito!');
+        showNotification(notificationMessage);
         
         // Dispatch event for tickets page
         window.dispatchEvent(new Event('ticketsUpdated'));
         
-        // Show first ticket
-        setTimeout(() => {
-            showMyTicketsModal();
-        }, 500);
+        // Show first ticket solo si el pago fue aprobado inmediatamente
+        if (paymentMethod === 'card') {
+            setTimeout(() => {
+                showMyTicketsModal();
+            }, 500);
+        }
     }, 2000);
 }
 
@@ -1774,7 +2003,10 @@ function logout() {
 
 // Modal Functions
 function closeEventModal() {
-    document.getElementById('eventModal').classList.remove('active');
+    const modal = document.getElementById('eventModal');
+    modal.classList.remove('active');
+    // Restaurar z-index por defecto
+    modal.style.zIndex = '';
 }
 
 function closeTicketModal() {
