@@ -1256,12 +1256,10 @@ function processPayment(event) {
         // Dispatch event for tickets page
         window.dispatchEvent(new Event('ticketsUpdated'));
         
-        // Show first ticket solo si el pago fue aprobado inmediatamente
-        if (paymentMethod === 'card') {
-            setTimeout(() => {
-                showMyTicketsModal();
-            }, 500);
-        }
+        // Redirigir a Mis Tickets después del pago
+        setTimeout(() => {
+            window.location.href = 'mistickets.html';
+        }, 1500);
     }, 2000);
 }
 
