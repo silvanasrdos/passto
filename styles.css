@@ -1624,6 +1624,7 @@ body.no-scroll {
     width: 100%;
     max-height: 95vh;
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 1;
     transition: var(--transition);
     display: flex;
@@ -2818,10 +2819,11 @@ body.no-scroll {
     .modal-content {
         max-width: 100%;
         max-height: 90vh;
+        margin: 0;
     }
     
     .event-detail-content {
-        padding: 20px;
+        padding: 16px;
     }
     
     .event-detail-title {
@@ -2831,6 +2833,63 @@ body.no-scroll {
     .event-detail-meta {
         flex-direction: column;
         gap: 12px;
+    }
+    
+    /* Mejoras para selector de cantidad en pantallas pequeñas */
+    .ticket-selection {
+        padding: 16px;
+    }
+    
+    .ticket-selection h3 {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+    
+    .ticket-type {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    .ticket-info {
+        width: 100%;
+    }
+    
+    .ticket-info h4 {
+        font-size: 15px;
+    }
+    
+    .ticket-info p {
+        font-size: 13px;
+    }
+    
+    .ticket-price-wrapper {
+        width: 100%;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+    
+    .ticket-price {
+        font-size: 20px;
+    }
+    
+    .quantity-selector {
+        gap: 8px;
+        flex-shrink: 0;
+    }
+    
+    .qty-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+    
+    .qty-display {
+        font-size: 15px;
+        min-width: 24px;
     }
 }
 
@@ -2991,6 +3050,39 @@ body.no-scroll {
     .event-title {
         font-size: 17px;
         min-height: 44px;
+    }
+    
+    /* Ajustes adicionales para selector de cantidad en móviles muy pequeños */
+    .ticket-selection {
+        padding: 12px;
+    }
+    
+    .ticket-type {
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .ticket-price-wrapper {
+        gap: 8px;
+    }
+    
+    .ticket-price {
+        font-size: 18px;
+    }
+    
+    .quantity-selector {
+        gap: 6px;
+    }
+    
+    .qty-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 13px;
+    }
+    
+    .qty-display {
+        font-size: 14px;
+        min-width: 20px;
     }
 }
 
