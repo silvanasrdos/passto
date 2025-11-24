@@ -1,0 +1,311 @@
+/* Historia Page Styles */
+.historia-main {
+    min-height: calc(100vh - 200px);
+    padding: 80px 0;
+    background: var(--bg-primary);
+}
+
+.historia-header {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.historia-title {
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-vip) 50%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.historia-subtitle {
+    font-size: 18px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.historia-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Timeline Section */
+.historia-timeline {
+    margin-bottom: 80px;
+}
+
+.timeline-item {
+    margin-bottom: 48px;
+    position: relative;
+    padding-left: 40px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: -48px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+    opacity: 0.3;
+}
+
+.timeline-item:last-child::before {
+    display: none;
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 8px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: 3px solid var(--bg-primary);
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.timeline-content {
+    background: var(--card-bg);
+    padding: 32px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.timeline-content:hover {
+    transform: translateX(8px);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 24px rgba(44, 140, 251, 0.2);
+}
+
+.timeline-content h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+.timeline-content p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Mission Section */
+.historia-mission {
+    margin-bottom: 80px;
+}
+
+.mission-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+}
+
+.mission-card {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.mission-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary-color);
+    box-shadow: 0 12px 32px rgba(44, 140, 251, 0.3);
+}
+
+.mission-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: var(--white);
+    box-shadow: 0 8px 24px rgba(44, 140, 251, 0.3);
+}
+
+.mission-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.mission-card p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* About Section */
+.historia-about {
+    margin-bottom: 40px;
+}
+
+.section-title-historia {
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 48px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 48px;
+    align-items: start;
+}
+
+.about-text {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.about-description {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.about-description:last-child {
+    margin-bottom: 0;
+}
+
+.about-description strong {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.about-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-item {
+    background: var(--card-bg);
+    padding: 24px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: var(--transition);
+}
+
+.info-item:hover {
+    transform: translateX(8px);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 24px rgba(44, 140, 251, 0.2);
+}
+
+.info-item i {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 12px;
+    color: var(--white);
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.info-item h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-item p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .historia-title {
+        font-size: 32px;
+    }
+    
+    .historia-subtitle {
+        font-size: 16px;
+    }
+    
+    .timeline-item {
+        padding-left: 40px;
+    }
+    
+    .timeline-item::before {
+        left: 15px;
+    }
+    
+    .timeline-item::after {
+        left: 9px;
+    }
+    
+    .timeline-content {
+        padding: 24px;
+    }
+    
+    .mission-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    
+    .about-text {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .historia-main {
+        padding: 40px 0;
+    }
+    
+    .info-item {
+        padding: 20px;
+    }
+    
+    .info-item i {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+}
+

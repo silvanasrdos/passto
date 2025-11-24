@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Tickets - PassTo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mistickets-estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="logoopassto.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                    <img src="logoopassto.svg" alt="PassTo Logo" class="logo-character">
+                    <span>PassTo<sup></sup></span>
+                </div>
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link" data-page="index">Inicio</a>
+                    <a href="#" class="nav-link active" data-page="tickets">Mis Tickets</a> 
+                    <a href="historia.html" class="nav-link" data-page="historia">Historia</a>
+                    <a href="mis-eventos.html" class="nav-link" id="misEventosLink" data-page="mis-eventos" style="display: none;">Mis Eventos</a>
+                </nav>
+                <div class="nav-actions">
+                    <button class="icon-btn cart-btn" id="cartBtn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="badge" id="cartBadge">0</span>
+                    </button>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menú">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="user-dropdown desktop-only" id="userDropdown">
+                        <button class="user-dropdown-btn" id="userDropdownBtn">
+                            <span id="userName" class="user-name-text">Iniciar Sesión</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown-menu" id="userDropdownMenu">
+                            <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof showUserMenu === 'function'){showUserMenu();}else{showNotification('Función no disponible');}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');}else{window.location.href='index.html';}} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                            <a href="mistickets.html"><i class="fas fa-ticket"></i> Mis Entradas</a>
+                            <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof logout === 'function'){logout();}else{localStorage.removeItem('currentUser');window.location.reload();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');}else{window.location.href='index.html';}} return false;"><i class="fas fa-sign-out-alt"></i> <span id="logoutText">Cerrar Sesión</span></a>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-create-event desktop-only" id="registerBtn">
+                        <span class="btn-create-text">CREAR EVENTO</span>
+                        <i class="fas fa-plus mobile-only"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <span>Menú<sup></sup></span>
+            </div>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-content" id="mobileMenuContent">
+            <!-- Los enlaces se copiarán dinámicamente desde nav-menu -->
+        </div>
+        <div class="mobile-menu-actions">
+            <button class="btn-primary btn-create-event" id="mobileCreateEventBtn">
+                <i class="fas fa-plus"></i>
+                <span>CREAR EVENTO</span>
+            </button>
+            <div class="user-dropdown">
+                <button class="user-dropdown-btn" id="mobileUserDropdownBtn">
+                    <span id="mobileUserName">Iniciar Sesión</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="user-dropdown-menu" id="mobileUserDropdownMenu">
+                    <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof showUserMenu === 'function'){showUserMenu();closeMobileMenu();}else{showNotification('Función no disponible');closeMobileMenu();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');closeMobileMenu();}else{window.location.href='index.html';}} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                    <a href="mistickets.html" onclick="closeMobileMenu();"><i class="fas fa-ticket"></i> Mis Entradas</a>
+                    <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof logout === 'function'){logout();closeMobileMenu();}else{localStorage.removeItem('currentUser');window.location.reload();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');closeMobileMenu();}else{window.location.href='index.html';}} return false;"><i class="fas fa-sign-out-alt"></i> <span id="mobileLogoutText">Cerrar Sesión</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="tickets-main">
+        <div class="container">
+            <div class="tickets-header">
+                <h1 class="tickets-title">Mis Tickets</h1>
+                <p class="tickets-subtitle">Gestiona todas tus entradas en un solo lugar</p>
+            </div>
+
+            <!-- Login Required Message -->
+            <div id="loginRequired" class="login-required-message">
+                <div class="login-required-content">
+                    <i class="fas fa-lock"></i>
+                    <h2>Inicia sesión para ver tus tickets</h2>
+                    <p>Necesitas iniciar sesión para acceder a tus entradas</p>
+                    <button class="btn-primary" onclick="if(typeof showAuthModal === 'function'){showAuthModal('login');}else{window.location.href='index.html';}">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Iniciar Sesión
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tickets Content -->
+            <div id="ticketsContent" class="tickets-content" style="display: none;">
+                <!-- Eventos por Venir -->
+                <section class="tickets-section">
+                    <div class="section-header-tickets">
+                        <h2 class="section-title-tickets">
+                            <i class="fas fa-calendar-check"></i>
+                            Eventos por Venir
+                        </h2>
+                        <span class="ticket-count" id="upcomingCount">0</span>
+                    </div>
+                    <div class="tickets-grid" id="upcomingTickets">
+                        <!-- Tickets will be loaded here -->
+                    </div>
+                    <div class="empty-tickets" id="emptyUpcoming" style="display: none;">
+                        <i class="far fa-calendar-times"></i>
+                        <p>No tienes eventos próximos</p>
+                    </div>
+                </section>
+
+                <!-- Eventos Cancelados -->
+                <section class="tickets-section" id="cancelledSection" style="display: none;">
+                    <div class="section-header-tickets">
+                        <h2 class="section-title-tickets">
+                            <i class="fas fa-ban"></i>
+                            Eventos Cancelados
+                        </h2>
+                        <span class="ticket-count cancelled-count" id="cancelledCount">0</span>
+                    </div>
+                    <div class="tickets-grid" id="cancelledTickets">
+                        <!-- Tickets will be loaded here -->
+                    </div>
+                    <div class="empty-tickets" id="emptyCancelled" style="display: none;">
+                        <i class="far fa-calendar-times"></i>
+                        <p>No tienes eventos cancelados</p>
+                    </div>
+                </section>
+
+                <!-- Eventos Pasados -->
+                <section class="tickets-section">
+                    <div class="section-header-tickets">
+                        <h2 class="section-title-tickets">
+                            <i class="fas fa-history"></i>
+                            Eventos Pasados
+                        </h2>
+                        <span class="ticket-count" id="pastCount">0</span>
+                    </div>
+                    <div class="tickets-grid" id="pastTickets">
+                        <!-- Tickets will be loaded here -->
+                    </div>
+                    <div class="empty-tickets" id="emptyPast" style="display: none;">
+                        <i class="far fa-calendar-check"></i>
+                        <p>No tienes eventos pasados</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; 2025 PassTo. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal (from index.html functionality) -->
+    <div class="modal" id="eventModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be dynamically added -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+    <script src="tickets-script.js"></script>
+</body>
+</html>
+

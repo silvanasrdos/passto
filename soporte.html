@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones - PassTo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="estilos.soporte.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="logoopassto.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                    <img src="logoopassto.svg" alt="PassTo Logo" class="logo-character">
+                    <span>PassTo<sup></sup></span>
+                </div>
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link" data-page="index">Inicio</a>
+                    <a href="#" class="nav-link" data-page="tickets">Mis Tickets</a> 
+                    <a href="historia.html" class="nav-link" data-page="historia">Historia</a>
+                    <a href="mis-eventos.html" class="nav-link" id="misEventosLink" data-page="mis-eventos" style="display: none;">Mis Eventos</a>
+                </nav>
+                <div class="nav-actions">
+                    <button class="icon-btn cart-btn" id="cartBtn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="badge" id="cartBadge">0</span>
+                    </button>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menú">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="user-dropdown desktop-only" id="userDropdown">
+                        <button class="user-dropdown-btn" id="userDropdownBtn">
+                            <span id="userName" class="user-name-text">Iniciar Sesión</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown-menu" id="userDropdownMenu">
+                            <a href="#" onclick="if(currentUser){showUserMenu();}else{showAuthModal('login');} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                            <a href="#" onclick="if(currentUser){logout();}else{showAuthModal('login');} return false;"><i class="fas fa-sign-out-alt"></i> <span id="logoutText">Cerrar Sesión</span></a>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-create-event desktop-only" id="registerBtn">
+                        <span class="btn-create-text">CREAR EVENTO</span>
+                        <i class="fas fa-plus mobile-only"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <span>Menú<sup></sup></span>
+            </div>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-content" id="mobileMenuContent">
+            <!-- Los enlaces se copiarán dinámicamente desde nav-menu -->
+        </div>
+        <div class="mobile-menu-actions">
+            <button class="btn-primary btn-create-event" id="mobileCreateEventBtn">
+                <i class="fas fa-plus"></i>
+                <span>CREAR EVENTO</span>
+            </button>
+            <div class="user-dropdown">
+                <button class="user-dropdown-btn" id="mobileUserDropdownBtn">
+                    <span id="mobileUserName">Iniciar Sesión</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="user-dropdown-menu" id="mobileUserDropdownMenu">
+                    <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof showUserMenu === 'function'){showUserMenu();closeMobileMenu();}else{showNotification('Función no disponible');closeMobileMenu();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');closeMobileMenu();}else{window.location.href='index.html';}} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                    <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof logout === 'function'){logout();closeMobileMenu();}else{localStorage.removeItem('currentUser');window.location.reload();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');closeMobileMenu();}else{window.location.href='index.html';}} return false;"><i class="fas fa-sign-out-alt"></i> <span id="mobileLogoutText">Cerrar Sesión</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="support-main">
+        <div class="container">
+            <div class="support-header">
+                <h1><i class="fas fa-file-contract"></i> Términos y Condiciones</h1>
+                <p class="support-subtitle">Última actualización: Enero 2025</p>
+            </div>
+
+            <div class="support-content">
+                <!-- Tabla de Contenidos -->
+                <div class="table-of-contents">
+                    <h3><i class="fas fa-list"></i> Índice</h3>
+                    <ul>
+                        <li><a href="#aceptacion">1. Aceptación de los Términos</a></li>
+                        <li><a href="#definiciones">2. Definiciones</a></li>
+                        <li><a href="#uso-plataforma">3. Uso de la Plataforma</a></li>
+                        <li><a href="#registro">4. Registro y Cuentas de Usuario</a></li>
+                        <li><a href="#compra-venta">5. Compra y Venta de Entradas</a></li>
+                        <li><a href="#comisiones">6. Comisiones y Tarifas</a></li>
+                        <li><a href="#reembolsos">7. Política de Reembolsos</a></li>
+                        <li><a href="#eventos-cancelados">8. Eventos Cancelados o Postergados</a></li>
+                        <li><a href="#responsabilidades">9. Responsabilidades</a></li>
+                        <li><a href="#propiedad-intelectual">10. Propiedad Intelectual</a></li>
+                        <li><a href="#privacidad">11. Privacidad y Protección de Datos</a></li>
+                        <li><a href="#limitaciones">12. Limitaciones de Responsabilidad</a></li>
+                        <li><a href="#modificaciones">13. Modificaciones de los Términos</a></li>
+                        <li><a href="#ley-aplicable">14. Ley Aplicable y Jurisdicción</a></li>
+                        <li><a href="#contacto">15. Contacto</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contenedor de Secciones -->
+                <div class="terms-sections-wrapper">
+                <!-- Sección 1: Aceptación -->
+                <section id="aceptacion" class="terms-section">
+                    <h2><span class="section-number">1.</span> Aceptación de los Términos</h2>
+                    <p>Al acceder y utilizar la plataforma PassTo (en adelante, "la Plataforma" o "PassTo"), usted acepta estar sujeto a estos Términos y Condiciones de Uso (en adelante, "los Términos"). Si no está de acuerdo con alguna parte de estos términos, no debe utilizar nuestros servicios.</p>
+                    <p>Estos términos constituyen un acuerdo legalmente vinculante entre usted y PassTo. Al crear una cuenta, comprar entradas, vender entradas o utilizar cualquier funcionalidad de la Plataforma, usted confirma que ha leído, entendido y acepta cumplir con todos estos términos.</p>
+                </section>
+
+                <!-- Sección 2: Definiciones -->
+                <section id="definiciones" class="terms-section">
+                    <h2><span class="section-number">2.</span> Definiciones</h2>
+                    <div class="definitions-list">
+                        <div class="definition-item">
+                            <strong>Plataforma:</strong> Se refiere al sitio web, aplicación móvil y todos los servicios ofrecidos por PassTo.
+                        </div>
+                        <div class="definition-item">
+                            <strong>Usuario:</strong> Cualquier persona que accede o utiliza la Plataforma.
+                        </div>
+                        <div class="definition-item">
+                            <strong>Organizador/Productor:</strong> Persona o entidad que crea y gestiona eventos a través de la Plataforma.
+                        </div>
+                        <div class="definition-item">
+                            <strong>Comprador:</strong> Usuario que adquiere entradas para eventos a través de la Plataforma.
+                        </div>
+                        <div class="definition-item">
+                            <strong>Entrada/Ticket:</strong> Documento digital o físico que otorga derecho de acceso a un evento.
+                        </div>
+                        <div class="definition-item">
+                            <strong>Evento:</strong> Cualquier actividad, espectáculo, concierto, partido deportivo u otro evento para el cual se venden entradas a través de la Plataforma.
+                        </div>
+                        <div class="definition-item">
+                            <strong>Comisión:</strong> Porcentaje que PassTo retiene del precio de venta de cada entrada como contraprestación por sus servicios.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección 3: Uso de la Plataforma -->
+                <section id="uso-plataforma" class="terms-section">
+                    <h2><span class="section-number">3.</span> Uso de la Plataforma</h2>
+                    <h3>3.1. Uso Permitido</h3>
+                    <p>La Plataforma está destinada únicamente para uso personal y comercial legítimo. Usted se compromete a:</p>
+                    <ul>
+                        <li>Utilizar la Plataforma de acuerdo con todas las leyes y regulaciones aplicables</li>
+                        <li>Proporcionar información veraz, precisa y actualizada</li>
+                        <li>Mantener la confidencialidad de su cuenta y contraseña</li>
+                        <li>Notificar inmediatamente cualquier uso no autorizado de su cuenta</li>
+                        <li>Ser responsable de todas las actividades que ocurran bajo su cuenta</li>
+                    </ul>
+
+                    <h3>3.2. Uso Prohibido</h3>
+                    <p>Está estrictamente prohibido:</p>
+                    <ul>
+                        <li>Utilizar la Plataforma para cualquier propósito ilegal o no autorizado</li>
+                        <li>Intentar acceder a áreas restringidas de la Plataforma</li>
+                        <li>Interferir con el funcionamiento de la Plataforma o sus servidores</li>
+                        <li>Realizar ingeniería inversa, descompilar o desensamblar cualquier parte de la Plataforma</li>
+                        <li>Vender, revender o transferir entradas de manera no autorizada</li>
+                        <li>Utilizar bots, scripts automatizados o cualquier método para manipular el sistema</li>
+                        <li>Publicar contenido falso, difamatorio, ofensivo o que viole derechos de terceros</li>
+                    </ul>
+                </section>
+
+                <!-- Sección 4: Registro -->
+                <section id="registro" class="terms-section">
+                    <h2><span class="section-number">4.</span> Registro y Cuentas de Usuario</h2>
+                    <h3>4.1. Creación de Cuenta</h3>
+                    <p>Para utilizar ciertas funcionalidades de la Plataforma, debe crear una cuenta proporcionando información precisa y completa. Usted es responsable de mantener la confidencialidad de sus credenciales de acceso.</p>
+
+                    <h3>4.2. Verificación de Identidad</h3>
+                    <p>PassTo se reserva el derecho de verificar la identidad de los usuarios, especialmente para organizadores de eventos. Podemos solicitar documentación adicional cuando sea necesario.</p>
+
+                    <h3>4.3. Cuentas de Organizadores</h3>
+                    <p>Los organizadores de eventos deben proporcionar información comercial válida y cumplir con todos los requisitos legales para la organización de eventos en su jurisdicción.</p>
+                </section>
+
+                <!-- Sección 5: Compra y Venta -->
+                <section id="compra-venta" class="terms-section">
+                    <h2><span class="section-number">5.</span> Compra y Venta de Entradas</h2>
+                    <h3>5.1. Proceso de Compra</h3>
+                    <p>Al comprar entradas a través de PassTo:</p>
+                    <ul>
+                        <li>Usted acepta pagar el precio total indicado, incluyendo comisiones y cargos aplicables</li>
+                        <li>La compra se considera final una vez procesado el pago</li>
+                        <li>Recibirá una confirmación por correo electrónico con los detalles de su compra</li>
+                        <li>Las entradas digitales estarán disponibles en su cuenta de usuario</li>
+                    </ul>
+
+                    <h3>5.2. Precios y Disponibilidad</h3>
+                    <p>Los precios de las entradas son establecidos por los organizadores de eventos. PassTo no garantiza la disponibilidad de entradas y se reserva el derecho de limitar la cantidad de entradas por comprador.</p>
+
+                    <h3>5.3. Venta de Entradas por Organizadores</h3>
+                    <p>Los organizadores que venden entradas a través de PassTo:</p>
+                    <ul>
+                        <li>Son responsables de establecer precios justos y razonables</li>
+                        <li>Deben cumplir con todas las leyes aplicables sobre venta de entradas</li>
+                        <li>Son responsables de la validez y autenticidad de las entradas vendidas</li>
+                        <li>Deben proporcionar información precisa sobre el evento</li>
+                    </ul>
+
+                    <h3>5.4. Entradas Digitales (eTickets)</h3>
+                    <p>Las entradas digitales son el método predeterminado de entrega. Usted acepta:</p>
+                    <ul>
+                        <li>Recibir entradas por correo electrónico o descargarlas desde su cuenta</li>
+                        <li>Presentar la entrada digital (QR code) en el evento</li>
+                        <li>Mantener la entrada segura y no compartirla con terceros no autorizados</li>
+                    </ul>
+                </section>
+
+                <!-- Sección 6: Comisiones -->
+                <section id="comisiones" class="terms-section highlight-section">
+                    <h2><span class="section-number">6.</span> Comisiones y Tarifas</h2>
+                    <div class="commission-box">
+                        <h3><i class="fas fa-percentage"></i> Estructura de Comisiones</h3>
+                        <p>PassTo aplica una comisión sobre el precio de venta de cada entrada, calculada según el volumen total de entradas vendidas para el evento:</p>
+                        
+                        <div class="commission-rates">
+                            <div class="commission-rate">
+                                <div class="rate-icon">
+                                    <i class="fas fa-ticket-alt"></i>
+                                </div>
+                                <div class="rate-content">
+                                    <h4>Menos de 5,000 entradas</h4>
+                                    <p class="rate-percentage">Comisión del <strong>10%</strong></p>
+                                    <p class="rate-description">Aplicable cuando el evento vende menos de 5,000 entradas en total</p>
+                                </div>
+                            </div>
+                            
+                            <div class="commission-rate">
+                                <div class="rate-icon">
+                                    <i class="fas fa-ticket-alt"></i>
+                                </div>
+                                <div class="rate-content">
+                                    <h4>5,000 entradas o más</h4>
+                                    <p class="rate-percentage">Comisión del <strong>8%</strong></p>
+                                    <p class="rate-description">Aplicable cuando el evento alcanza o supera las 5,000 entradas vendidas</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="commission-example">
+                            <h4><i class="fas fa-calculator"></i> Ejemplo de Cálculo</h4>
+                            <div class="example-scenarios">
+                                <div class="example-scenario">
+                                    <p><strong>Escenario 1:</strong> Evento con 3,000 entradas vendidas</p>
+                                    <p>Precio por entrada: $10,000</p>
+                                    <p>Comisión aplicada: <strong>10%</strong> ($1,000 por entrada)</p>
+                                    <p>Ingreso del organizador: $9,000 por entrada</p>
+                                </div>
+                                <div class="example-scenario">
+                                    <p><strong>Escenario 2:</strong> Evento con 6,000 entradas vendidas</p>
+                                    <p>Precio por entrada: $10,000</p>
+                                    <p>Comisión aplicada: <strong>8%</strong> ($800 por entrada)</p>
+                                    <p>Ingreso del organizador: $9,200 por entrada</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="commission-notes">
+                            <h4><i class="fas fa-info-circle"></i> Notas Importantes</h4>
+                            <ul>
+                                <li>La comisión se calcula sobre el <strong>precio de venta final</strong> de cada entrada</li>
+                                <li>El umbral de 5,000 entradas se calcula sobre el <strong>total de entradas vendidas</strong> del evento, no por tipo de entrada</li>
+                                <li>La comisión se aplica de forma <strong>retroactiva</strong> cuando se alcanza el umbral de 5,000 entradas</li>
+                                <li>Las comisiones se deducen automáticamente del monto total recaudado</li>
+                                <li>Los pagos a organizadores se procesan según el calendario de pagos establecido</li>
+                                <li>No se aplican comisiones adicionales por servicios de procesamiento de pagos</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>6.1. Cargos Adicionales</h3>
+                    <p>Adicionalmente a las comisiones, pueden aplicarse:</p>
+                    <ul>
+                        <li>Cargos por procesamiento de pagos (si aplica)</li>
+                        <li>Tarifas por servicios premium o funcionalidades adicionales</li>
+                        <li>Impuestos según la legislación vigente</li>
+                    </ul>
+
+                    <h3>6.2. Pagos a Organizadores</h3>
+                    <p>Los pagos a organizadores se realizarán según el siguiente cronograma:</p>
+                    <ul>
+                        <li>Los fondos se mantendrán en custodia hasta 7 días después de la fecha del evento</li>
+                        <li>Una vez transcurrido este período, se procesará el pago menos las comisiones aplicables</li>
+                        <li>Los organizadores deben proporcionar información bancaria válida para recibir pagos</li>
+                    </ul>
+                </section>
+
+                <!-- Sección 7: Reembolsos -->
+                <section id="reembolsos" class="terms-section">
+                    <h2><span class="section-number">7.</span> Política de Reembolsos</h2>
+                    <h3>7.1. Solicitudes de Reembolso</h3>
+                    <p>Las solicitudes de reembolso deben realizarse a través de la Plataforma o contactando directamente al organizador del evento. PassTo actúa como intermediario y facilitará el proceso de reembolso cuando corresponda.</p>
+
+                    <h3>7.2. Condiciones para Reembolsos</h3>
+                    <p>Los reembolsos están sujetos a las políticas del organizador del evento. Generalmente, se aplican las siguientes condiciones:</p>
+                    <ul>
+                        <li>Los reembolsos deben solicitarse antes de la fecha límite establecida por el organizador</li>
+                        <li>Las solicitudes de reembolso pueden estar sujetas a cargos administrativos</li>
+                        <li>Los reembolsos se procesarán al método de pago original utilizado</li>
+                        <li>El tiempo de procesamiento puede variar según el método de pago</li>
+                    </ul>
+
+                    <h3>7.3. Reembolsos por Cancelación de Eventos</h3>
+                    <p>Si un evento es cancelado por el organizador, los compradores tienen derecho a reembolso completo del precio pagado por la entrada, menos las comisiones de PassTo que no son reembolsables.</p>
+                </section>
+
+                <!-- Sección 8: Eventos Cancelados -->
+                <section id="eventos-cancelados" class="terms-section">
+                    <h2><span class="section-number">8.</span> Eventos Cancelados o Postergados</h2>
+                    <h3>8.1. Cancelación de Eventos</h3>
+                    <p>Si un evento es cancelado:</p>
+                    <ul>
+                        <li>Los compradores serán notificados por correo electrónico</li>
+                        <li>Se procesarán reembolsos automáticos cuando corresponda</li>
+                        <li>Las entradas quedarán invalidadas y marcadas como canceladas</li>
+                        <li>PassTo no será responsable de gastos adicionales incurridos por los compradores</li>
+                    </ul>
+
+                    <h3>8.2. Postergación de Eventos</h3>
+                    <p>Si un evento es postergado:</p>
+                    <ul>
+                        <li>Las entradas originales seguirán siendo válidas para la nueva fecha</li>
+                        <li>Los compradores serán notificados sobre la nueva fecha y hora</li>
+                        <li>Se ofrecerá la opción de reembolso si el comprador no puede asistir a la nueva fecha</li>
+                    </ul>
+
+                    <h3>8.3. Cambios en el Evento</h3>
+                    <p>Los organizadores se reservan el derecho de realizar cambios en el evento (artistas, horarios, ubicación, etc.). Los compradores serán notificados de cambios significativos y pueden tener derecho a reembolso según las circunstancias.</p>
+                </section>
+
+                <!-- Sección 9: Responsabilidades -->
+                <section id="responsabilidades" class="terms-section">
+                    <h2><span class="section-number">9.</span> Responsabilidades</h2>
+                    <h3>9.1. Responsabilidades de PassTo</h3>
+                    <p>PassTo se compromete a:</p>
+                    <ul>
+                        <li>Proporcionar una plataforma segura y funcional para la compra y venta de entradas</li>
+                        <li>Procesar pagos de manera segura y eficiente</li>
+                        <li>Proteger la información personal de los usuarios según nuestra Política de Privacidad</li>
+                        <li>Actuar como intermediario entre compradores y organizadores</li>
+                    </ul>
+
+                    <h3>9.2. Responsabilidades de los Organizadores</h3>
+                    <p>Los organizadores son responsables de:</p>
+                    <ul>
+                        <li>La organización y ejecución del evento</li>
+                        <li>La validez y autenticidad de las entradas vendidas</li>
+                        <li>Proporcionar información precisa sobre el evento</li>
+                        <li>Cumplir con todas las leyes y regulaciones aplicables</li>
+                        <li>Gestionar reembolsos según sus políticas</li>
+                    </ul>
+
+                    <h3>9.3. Responsabilidades de los Compradores</h3>
+                    <p>Los compradores son responsables de:</p>
+                    <ul>
+                        <li>Verificar la información del evento antes de comprar</li>
+                        <li>Llegar al evento a tiempo con su entrada válida</li>
+                        <li>Cumplir con las reglas y políticas del evento</li>
+                        <li>Mantener seguras sus credenciales de acceso</li>
+                    </ul>
+                </section>
+
+                <!-- Sección 10: Propiedad Intelectual -->
+                <section id="propiedad-intelectual" class="terms-section">
+                    <h2><span class="section-number">10.</span> Propiedad Intelectual</h2>
+                    <p>Todos los contenidos de la Plataforma, incluyendo pero no limitado a textos, gráficos, logos, iconos, imágenes, software y código fuente, son propiedad de PassTo o sus licenciantes y están protegidos por leyes de propiedad intelectual.</p>
+                    <p>Usted no puede reproducir, distribuir, modificar, crear obras derivadas, mostrar públicamente o utilizar comercialmente ningún contenido de la Plataforma sin el permiso expreso por escrito de PassTo.</p>
+                </section>
+
+                <!-- Sección 11: Privacidad -->
+                <section id="privacidad" class="terms-section">
+                    <h2><span class="section-number">11.</span> Privacidad y Protección de Datos</h2>
+                    <p>El uso de la Plataforma está sujeto a nuestra Política de Privacidad, que forma parte integral de estos Términos. Al utilizar nuestros servicios, usted acepta el procesamiento de sus datos personales según se describe en nuestra Política de Privacidad.</p>
+                    <p>PassTo cumple con las leyes de protección de datos aplicables y se compromete a proteger la privacidad de sus usuarios.</p>
+                </section>
+
+                <!-- Sección 12: Limitaciones -->
+                <section id="limitaciones" class="terms-section">
+                    <h2><span class="section-number">12.</span> Limitaciones de Responsabilidad</h2>
+                    <h3>12.1. Exención de Garantías</h3>
+                    <p>La Plataforma se proporciona "tal cual" y "según disponibilidad". PassTo no garantiza que:</p>
+                    <ul>
+                        <li>La Plataforma esté libre de errores o interrupciones</li>
+                        <li>Los resultados obtenidos del uso de la Plataforma sean precisos o confiables</li>
+                        <li>Cualquier defecto en la Plataforma será corregido</li>
+                    </ul>
+
+                    <h3>12.2. Limitación de Daños</h3>
+                    <p>En la máxima medida permitida por la ley, PassTo no será responsable de:</p>
+                    <ul>
+                        <li>Daños indirectos, incidentales, especiales o consecuentes</li>
+                        <li>Pérdida de beneficios, datos o uso</li>
+                        <li>Problemas relacionados con eventos organizados por terceros</li>
+                        <li>Cambios o cancelaciones de eventos por parte de los organizadores</li>
+                    </ul>
+
+                    <h3>12.3. Responsabilidad Máxima</h3>
+                    <p>La responsabilidad total de PassTo hacia usted por cualquier reclamo relacionado con estos Términos o el uso de la Plataforma no excederá el monto total que usted haya pagado a PassTo en los últimos 12 meses.</p>
+                </section>
+
+                <!-- Sección 13: Modificaciones -->
+                <section id="modificaciones" class="terms-section">
+                    <h2><span class="section-number">13.</span> Modificaciones de los Términos</h2>
+                    <p>PassTo se reserva el derecho de modificar estos Términos en cualquier momento. Las modificaciones entrarán en vigor inmediatamente después de su publicación en la Plataforma.</p>
+                    <p>Es su responsabilidad revisar periódicamente estos Términos. El uso continuado de la Plataforma después de cualquier modificación constituye su aceptación de los nuevos términos.</p>
+                    <p>Si no está de acuerdo con las modificaciones, debe dejar de utilizar la Plataforma y puede solicitar el cierre de su cuenta.</p>
+                </section>
+
+                <!-- Sección 14: Ley Aplicable -->
+                <section id="ley-aplicable" class="terms-section">
+                    <h2><span class="section-number">14.</span> Ley Aplicable y Jurisdicción</h2>
+                    <p>Estos Términos se rigen por las leyes de la República Argentina. Cualquier disputa que surja de o esté relacionada con estos Términos será sometida a la jurisdicción exclusiva de los tribunales de la Ciudad Autónoma de Buenos Aires, Argentina.</p>
+                    <p>Si alguna disposición de estos Términos se considera inválida o inaplicable, las disposiciones restantes permanecerán en pleno vigor y efecto.</p>
+                </section>
+
+                <!-- Sección 15: Contacto -->
+                <section id="contacto" class="terms-section">
+                    <h2><span class="section-number">15.</span> Contacto</h2>
+                    <p>Si tiene preguntas sobre estos Términos y Condiciones, puede contactarnos a través de:</p>
+                    <div class="contact-info">
+                        <div class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <strong>Email:</strong>
+                                <a href="mailto:legal@passto.com">legal@passto.com</a>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <strong>Teléfono:</strong>
+                                <span>+54 (555) 123-4567</span>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong>Dirección:</strong>
+                                <span>Presidencia Roque Sáenz Peña, Chaco, Argentina</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Aceptación Final -->
+                <div class="acceptance-box">
+                    <h3><i class="fas fa-check-circle"></i> Aceptación de los Términos</h3>
+                    <p>Al utilizar la Plataforma PassTo, usted confirma que ha leído, entendido y acepta estar sujeto a estos Términos y Condiciones de Uso.</p>
+                    <p class="last-updated"><strong>Última actualización:</strong> Enero 2025</p>
+                </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-newsletter">
+                    <div class="newsletter-content">
+                        <h3>¡No te pierdas ningún evento!</h3>
+                        <p>Suscríbete a nuestro newsletter y recibe las mejores ofertas</p>
+                    </div>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Tu correo electrónico" class="newsletter-input" id="newsletterEmail">
+                        <button class="newsletter-btn" onclick="subscribeNewsletter()">
+                            <i class="fas fa-paper-plane"></i>
+                            Suscribirme
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="footer-main">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="logoopassto.svg" alt="PassTo Logo" class="footer-logo-character">
+                        <span>PassTo</span>
+                    </div>
+                    <p class="footer-tagline">Tu pase a experiencias inolvidables. Descubre y compra entradas para los mejores eventos de tu ciudad.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Categorías</h4>
+                    <a href="#"><i class="fas fa-music"></i> Conciertos</a>
+                    <a href="#"><i class="fas fa-basketball"></i> Deportes</a>
+                    <a href="#"><i class="fas fa-masks-theater"></i> Teatro</a>
+                    <a href="#"><i class="fas fa-microphone"></i> Conferencias</a>
+                    <a href="#"><i class="fas fa-palette"></i> Arte</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Empresa</h4>
+                    <a href="historia.html">Sobre Nosotros</a>
+                    <a href="#">Trabaja con Nosotros</a>
+                    <a href="#">Asociados</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Soporte</h4>
+                    <a href="#">Centro de Ayuda</a>
+                    <a href="preguntas-frecuentes.html">Preguntas Frecuentes</a>
+                    <a href="soporte.html">Términos y Condiciones</a>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Contacto</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; 2025 PassTo. Todos los derechos reservados.</p>
+                    <p class="made-with">Hecho con <i class="fas fa-heart"></i> para los amantes de eventos</p>
+                </div>
+                <div class="footer-social">
+                    <span>Síguenos:</span>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link" title="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="soporte-script.js"></script>
+</body>
+</html>
+

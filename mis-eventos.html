@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Eventos - PassTo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="estilos-eventos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="logoopassto.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                    <img src="logoopassto.svg" alt="PassTo Logo" class="logo-character">
+                    <span>PassTo<sup></sup></span>
+                </div>
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link" data-page="index">Inicio</a>
+                    <a href="#" class="nav-link" data-page="tickets">Mis Tickets</a>
+                    <a href="historia.html" class="nav-link" data-page="historia">Historia</a>
+                    <a href="mis-eventos.html" class="nav-link active" id="misEventosLink" data-page="mis-eventos">Mis Eventos</a>
+                </nav>
+                <div class="nav-actions">
+                    <button class="icon-btn cart-btn" id="cartBtn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="badge" id="cartBadge">0</span>
+                    </button>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menú">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="user-dropdown desktop-only" id="userDropdown">
+                        <button class="user-dropdown-btn" id="userDropdownBtn">
+                            <span id="userName" class="user-name-text">Iniciar Sesión</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown-menu" id="userDropdownMenu">
+                            <a href="#" onclick="if(currentUser){showUserMenu();}else{showAuthModal('login');} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                            <a href="#" onclick="if(currentUser){logout();}else{showAuthModal('login');} return false;"><i class="fas fa-sign-out-alt"></i> <span id="logoutText">Cerrar Sesión</span></a>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-create-event desktop-only" id="registerBtn">
+                        <span class="btn-create-text">CREAR EVENTO</span>
+                        <i class="fas fa-plus mobile-only"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <span>Menú<sup></sup></span>
+            </div>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-content" id="mobileMenuContent">
+            <!-- Los enlaces se copiarán dinámicamente desde nav-menu -->
+        </div>
+        <div class="mobile-menu-actions">
+            <button class="btn-primary btn-create-event" id="mobileCreateEventBtn">
+                <i class="fas fa-plus"></i>
+                <span>CREAR EVENTO</span>
+            </button>
+            <div class="user-dropdown">
+                <button class="user-dropdown-btn" id="mobileUserDropdownBtn">
+                    <span id="mobileUserName">Iniciar Sesión</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="user-dropdown-menu" id="mobileUserDropdownMenu">
+                    <a href="#" onclick="if(currentUser){showUserMenu();closeMobileMenu();}else{showAuthModal('login');closeMobileMenu();} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                    <a href="#" onclick="if(currentUser){logout();closeMobileMenu();}else{showAuthModal('login');closeMobileMenu();} return false;"><i class="fas fa-sign-out-alt"></i> <span id="mobileLogoutText">Cerrar Sesión</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="my-events-main">
+        <div class="container">
+            <div class="my-events-header">
+                <div>
+                    <h1><i class="fas fa-calendar-check"></i> Mis Eventos</h1>
+                    <p>Administra tus eventos y consulta las estadísticas de ventas</p>
+                </div>
+                <a href="evento.html" class="btn-primary btn-create-new">
+                    <i class="fas fa-plus"></i>
+                    Crear Nuevo Evento
+                </a>
+            </div>
+
+            <!-- Estadísticas Generales -->
+            <div class="stats-grid" id="statsGrid">
+                <!-- Se llenará dinámicamente -->
+            </div>
+
+            <!-- Lista de Eventos -->
+            <div class="my-events-section">
+                <h2 class="section-title">Mis Eventos Creados</h2>
+                <div id="myEventsList" class="my-events-list">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+                <div id="emptyEvents" class="empty-state" style="display: none;">
+                    <i class="fas fa-calendar-times"></i>
+                    <h3>No has creado ningún evento aún</h3>
+                    <p>Crea tu primer evento y comienza a vender entradas</p>
+                    <a href="evento.html" class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Crear Mi Primer Evento
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Detalles del Evento -->
+    <div class="modal" id="eventDetailsModal">
+        <div class="modal-overlay" id="eventDetailsOverlay"></div>
+        <div class="modal-content event-details-modal">
+            <button class="modal-close" id="eventDetailsClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body" id="eventDetailsBody">
+                <!-- Se llenará dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-newsletter">
+                    <div class="newsletter-content">
+                        <h3>¡No te pierdas ningún evento!</h3>
+                        <p>Suscríbete a nuestro newsletter y recibe las mejores ofertas</p>
+                    </div>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Tu correo electrónico" class="newsletter-input" id="newsletterEmail">
+                        <button class="newsletter-btn" onclick="subscribeNewsletter()">
+                            <i class="fas fa-paper-plane"></i>
+                            Suscribirme
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="footer-main">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="logoopassto.svg" alt="PassTo Logo" class="footer-logo-character">
+                        <span>PassTo</span>
+                    </div>
+                    <p class="footer-tagline">Tu pase a experiencias inolvidables. Descubre y compra entradas para los mejores eventos de tu ciudad.</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; 2025 PassTo. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="mis-eventos.js"></script>
+</body>
+</html>
+

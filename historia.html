@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historia - PassTo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="historia-estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="logoopassto.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                    <img src="logoopassto.svg" alt="PassTo Logo" class="logo-character">
+                    <span>PassTo<sup>®</sup></span>
+                </div>
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link" data-page="index">Inicio</a>
+                    <a href="#" class="nav-link" data-page="tickets">Mis Tickets</a> 
+                    <a href="historia.html" class="nav-link active" data-page="historia">Historia</a>
+                    <a href="mis-eventos.html" class="nav-link" id="misEventosLink" data-page="mis-eventos" style="display: none;">Mis Eventos</a>
+                </nav>
+                <div class="nav-actions">
+                    <button class="icon-btn cart-btn" id="cartBtn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="badge" id="cartBadge">0</span>
+                    </button>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menú">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="user-dropdown desktop-only" id="userDropdown">
+                        <button class="user-dropdown-btn" id="userDropdownBtn">
+                            <span id="userName" class="user-name-text">Iniciar Sesión</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown-menu" id="userDropdownMenu">
+                            <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof showUserMenu === 'function'){showUserMenu();}else{showNotification('Función no disponible');}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');}else{window.location.href='index.html';}} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                            <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof logout === 'function'){logout();}else{localStorage.removeItem('currentUser');window.location.reload();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');}else{window.location.href='index.html';}} return false;"><i class="fas fa-sign-out-alt"></i> <span id="logoutText">Cerrar Sesión</span></a>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-create-event desktop-only" id="registerBtn">
+                        <span class="btn-create-text">CREAR EVENTO</span>
+                        <i class="fas fa-plus mobile-only"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <span>Menú<sup></sup></span>
+            </div>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-content" id="mobileMenuContent">
+            <!-- Los enlaces se copiarán dinámicamente desde nav-menu -->
+        </div>
+        <div class="mobile-menu-actions">
+            <button class="btn-primary btn-create-event" id="mobileCreateEventBtn">
+                <i class="fas fa-plus"></i>
+                <span>CREAR EVENTO</span>
+            </button>
+            <div class="user-dropdown">
+                <button class="user-dropdown-btn" id="mobileUserDropdownBtn">
+                    <span id="mobileUserName">Iniciar Sesión</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="user-dropdown-menu" id="mobileUserDropdownMenu">
+                    <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof showUserMenu === 'function'){showUserMenu();closeMobileMenu();}else{showNotification('Función no disponible');closeMobileMenu();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');closeMobileMenu();}else{window.location.href='index.html';}} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                    <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof logout === 'function'){logout();closeMobileMenu();}else{localStorage.removeItem('currentUser');window.location.reload();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');closeMobileMenu();}else{window.location.href='index.html';}} return false;"><i class="fas fa-sign-out-alt"></i> <span id="mobileLogoutText">Cerrar Sesión</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="historia-main">
+        <div class="container">
+            <div class="historia-header">
+                <h1 class="historia-title">Nuestra Historia</h1>
+                <p class="historia-subtitle">Conoce cómo nació PassTo y nuestra misión de promover los eventos en la región</p>
+            </div>
+
+            <div class="historia-content">
+                <!-- Timeline Section -->
+                <section class="historia-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>El Nacimiento de PassTo</h3>
+                            <p>PassTo nació en 2025 como proyecto de la materia "El Emprendedor Digital" del Instituto Juan Mantovani en Presidencia Roque Sáenz Peña. Surgió con la visión de crear una plataforma que promoviera y facilitara el acceso a los eventos culturales, deportivos y de entretenimiento en toda la región del NEA.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>Nuestra Misión Regional</h3>
+                            <p>Desde sus inicios, PassTo se enfocó en ser más que una simple plataforma de venta de entradas. Nuestro objetivo principal es promover y dar visibilidad a los eventos locales y regionales, conectando a productores de eventos con audiencias apasionadas y creando una comunidad alrededor de la cultura y el entretenimiento.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>Innovación y Tecnología</h3>
+                            <p>Desarrollamos una plataforma digital completa con sistema de tickets digitales, códigos QR, gestión de eventos y una experiencia de usuario moderna. Todo diseñado pensando en facilitar tanto a los productores como a los asistentes la organización y participación en eventos.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>El Presente y Futuro</h3>
+                            <p>Hoy, PassTo continúa creciendo con el compromiso de ser la plataforma de referencia para eventos en la región. Trabajamos día a día para mejorar la experiencia de nuestros usuarios y seguir promoviendo la riqueza cultural y de entretenimiento de nuestra región.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mission & Vision Section -->
+                <section class="historia-mission">
+                    <div class="mission-grid">
+                        <div class="mission-card">
+                            <div class="mission-icon">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <h3>Nuestra Misión</h3>
+                            <p>Promover y facilitar el acceso a los eventos culturales, deportivos y de entretenimiento en la región del NEA, conectando a productores de eventos con audiencias apasionadas y creando una plataforma que impulse la cultura local.</p>
+                        </div>
+
+                        <div class="mission-card">
+                            <div class="mission-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3>Nuestro Origen</h3>
+                            <p>PassTo nació como proyecto académico en el Instituto Juan Mantovani de Presidencia Roque Sáenz Peña, dentro de la materia "El Emprendedor Digital", con el objetivo de aplicar conocimientos tecnológicos para resolver necesidades reales de nuestra comunidad.</p>
+                        </div>
+
+                        <div class="mission-card">
+                            <div class="mission-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3>Nuestros Valores</h3>
+                            <p>Compromiso con la región, innovación tecnológica, transparencia y pasión por promover los eventos locales. Estos valores guían cada decisión y cada mejora que implementamos en nuestra plataforma.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- About Section -->
+                <section class="historia-about">
+                    <div class="about-content">
+                        <div class="about-text">
+                            <h2 class="section-title-historia">Sobre el Proyecto</h2>
+                            <p class="about-description">
+                                PassTo fue desarrollado en 2025 como parte del proyecto final de la materia <strong>"El Emprendedor Digital"</strong> del <strong>Instituto Juan Mantovani</strong> en <strong>Presidencia Roque Sáenz Peña</strong>.
+                            </p>
+                            <p class="about-description">
+                                El objetivo principal del proyecto es crear una plataforma digital que promueva y facilite el acceso a los eventos culturales, deportivos y de entretenimiento en toda la región del NEA. Buscamos conectar a productores de eventos con su audiencia, facilitando tanto la organización como la participación en eventos locales.
+                            </p>
+                            <p class="about-description">
+                                Esta iniciativa nace del compromiso con nuestra comunidad y la visión de utilizar la tecnología para impulsar la cultura y el entretenimiento regional, creando un espacio donde todos puedan descubrir y disfrutar de los mejores eventos de la zona.
+                            </p>
+                        </div>
+                        <div class="about-info">
+                            <div class="info-item">
+                                <i class="fas fa-university"></i>
+                                <div>
+                                    <h4>Institución</h4>
+                                    <p>Instituto Juan Mantovani</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-book"></i>
+                                <div>
+                                    <h4>Materia</h4>
+                                    <p>El Emprendedor Digital</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h4>Ubicación</h4>
+                                    <p>Presidencia Roque Sáenz Peña</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-calendar"></i>
+                                <div>
+                                    <h4>Año</h4>
+                                    <p>2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-newsletter">
+                    <div class="newsletter-content">
+                        <h3>¡No te pierdas ningún evento!</h3>
+                        <p>Suscríbete a nuestro newsletter y recibe las mejores ofertas</p>
+                    </div>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Tu correo electrónico" class="newsletter-input" id="newsletterEmail">
+                        <button class="newsletter-btn" onclick="if(typeof subscribeNewsletter === 'function'){subscribeNewsletter();}else{showNotification('Función no disponible');}">
+                            <i class="fas fa-paper-plane"></i>
+                            Suscribirme
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="footer-main">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="logoopassto.svg" alt="PassTo Logo" class="footer-logo-character">
+                        <span>PassTo</span>
+                    </div>
+                    <p class="footer-tagline">Tu pase a experiencias inolvidables. Descubre y compra entradas para los mejores eventos de tu ciudad.</p>
+                    <div class="footer-contact">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@passto.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Categorías</h4>
+                    <a href="#"><i class="fas fa-music"></i> Conciertos</a>
+                    <a href="#"><i class="fas fa-basketball"></i> Deportes</a>
+                    <a href="#"><i class="fas fa-masks-theater"></i> Teatro</a>
+                    <a href="#"><i class="fas fa-microphone"></i> Conferencias</a>
+                    <a href="#"><i class="fas fa-palette"></i> Arte</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Empresa</h4>
+                    <a href="#">Sobre Nosotros</a>
+                    <a href="historia.html">Historia</a>
+                    <a href="#">Trabaja con Nosotros</a>
+                    <a href="#">Prensa</a>
+                    <a href="#">Asociados</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Soporte</h4>
+                    <a href="#">Centro de Ayuda</a>
+                    <a href="preguntas-frecuentes.html">Preguntas Frecuentes</a>
+                    <a href="soporte.html">Términos y Condiciones</a>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Contacto</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; 2025 PassTo. Todos los derechos reservados.</p>
+                    <p class="made-with">Hecho con <i class="fas fa-heart"></i> para los amantes de eventos</p>
+                </div>
+                <div class="footer-social">
+                    <span>Síguenos:</span>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link" title="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal (from index.html functionality) -->
+    <div class="modal" id="eventModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be dynamically added -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

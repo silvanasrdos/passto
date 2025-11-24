@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas Frecuentes - PassTo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="estilos.faq.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="logoopassto.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                    <img src="logoopassto.svg" alt="PassTo Logo" class="logo-character">
+                    <span>PassTo<sup></sup></span>
+                </div>
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link" data-page="index">Inicio</a>
+                    <a href="#" class="nav-link" data-page="tickets">Mis Tickets</a> 
+                    <a href="historia.html" class="nav-link" data-page="historia">Historia</a>
+                    <a href="mis-eventos.html" class="nav-link" id="misEventosLink" data-page="mis-eventos" style="display: none;">Mis Eventos</a>
+                </nav>
+                <div class="nav-actions">
+                    <button class="icon-btn cart-btn" id="cartBtn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="badge" id="cartBadge">0</span>
+                    </button>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menú">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="user-dropdown desktop-only" id="userDropdown">
+                        <button class="user-dropdown-btn" id="userDropdownBtn">
+                            <span id="userName" class="user-name-text">Iniciar Sesión</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown-menu" id="userDropdownMenu">
+                            <a href="#" onclick="if(currentUser){showUserMenu();}else{showAuthModal('login');} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                            <a href="#" onclick="if(currentUser){logout();}else{showAuthModal('login');} return false;"><i class="fas fa-sign-out-alt"></i> <span id="logoutText">Cerrar Sesión</span></a>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-create-event desktop-only" id="registerBtn">
+                        <span class="btn-create-text">CREAR EVENTO</span>
+                        <i class="fas fa-plus mobile-only"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <span>Menú<sup></sup></span>
+            </div>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-content" id="mobileMenuContent">
+            <!-- Los enlaces se copiarán dinámicamente desde nav-menu -->
+        </div>
+        <div class="mobile-menu-actions">
+            <button class="btn-primary btn-create-event" id="mobileCreateEventBtn">
+                <i class="fas fa-plus"></i>
+                <span>CREAR EVENTO</span>
+            </button>
+            <div class="user-dropdown">
+                <button class="user-dropdown-btn" id="mobileUserDropdownBtn">
+                    <span id="mobileUserName">Iniciar Sesión</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="user-dropdown-menu" id="mobileUserDropdownMenu">
+                    <a href="#" onclick="if(currentUser){showUserMenu();closeMobileMenu();}else{showAuthModal('login');closeMobileMenu();} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                    <a href="#" onclick="if(currentUser){logout();closeMobileMenu();}else{showAuthModal('login');closeMobileMenu();} return false;"><i class="fas fa-sign-out-alt"></i> <span id="mobileLogoutText">Cerrar Sesión</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="faq-main">
+        <div class="container">
+            <div class="faq-header">
+                <h1><i class="fas fa-question-circle"></i> Preguntas Frecuentes</h1>
+                <p class="faq-subtitle">Encuentra respuestas rápidas a las preguntas más comunes sobre PassTo</p>
+            </div>
+
+            <!-- Barra de búsqueda -->
+            <div class="faq-search">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="faqSearch" placeholder="Buscar en preguntas frecuentes...">
+                    <button class="search-clear" id="searchClear" style="display: none;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Categorías -->
+            <div class="faq-categories">
+                <button class="category-btn active" data-category="all">
+                    <i class="fas fa-th"></i> Todas
+                </button>
+                <button class="category-btn" data-category="compra">
+                    <i class="fas fa-shopping-cart"></i> Compra de Entradas
+                </button>
+                <button class="category-btn" data-category="eventos">
+                    <i class="fas fa-calendar-alt"></i> Crear Eventos
+                </button>
+                <button class="category-btn" data-category="pagos">
+                    <i class="fas fa-credit-card"></i> Pagos y Reembolsos
+                </button>
+                <button class="category-btn" data-category="tickets">
+                    <i class="fas fa-ticket-alt"></i> Entradas Digitales
+                </button>
+                <button class="category-btn" data-category="cuenta">
+                    <i class="fas fa-user"></i> Mi Cuenta
+                </button>
+            </div>
+
+            <!-- Preguntas y Respuestas -->
+            <div class="faq-content">
+                <!-- Compra de Entradas -->
+                <section class="faq-section" data-category="compra">
+                    <h2 class="faq-section-title">
+                        <i class="fas fa-shopping-cart"></i> Compra de Entradas
+                    </h2>
+                    <div class="faq-accordion">
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Cómo compro entradas en PassTo?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Para comprar entradas:</p>
+                                <ol>
+                                    <li>Navega por los eventos disponibles en la página principal</li>
+                                    <li>Haz clic en el evento que te interese para ver los detalles</li>
+                                    <li>Selecciona el tipo de entrada y la cantidad deseada</li>
+                                    <li>Agrega las entradas al carrito</li>
+                                    <li>Completa el proceso de pago con tus datos</li>
+                                    <li>Recibirás las entradas digitales por correo electrónico</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Puedo comprar múltiples entradas a la vez?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Sí, puedes comprar múltiples entradas en una sola transacción. Simplemente selecciona la cantidad deseada antes de agregar al carrito. Ten en cuenta que algunos eventos pueden tener límites en la cantidad de entradas por comprador.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Qué métodos de pago aceptan?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Aceptamos diversos métodos de pago:</p>
+                                <ul>
+                                    <li>Tarjetas de crédito y débito (Visa, Mastercard, American Express)</li>
+                                    <li>Transferencias bancarias</li>
+                                    <li>Billeteras digitales</li>
+                                    <li>Otros métodos según disponibilidad en tu región</li>
+                                </ul>
+                                <p>Todos los pagos se procesan de forma segura y encriptada.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Puedo cancelar o modificar mi compra?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Las políticas de cancelación y modificación dependen del organizador del evento. Generalmente:</p>
+                                <ul>
+                                    <li>Puedes solicitar reembolsos hasta una fecha límite establecida por el organizador</li>
+                                    <li>Los cambios de fecha o tipo de entrada están sujetos a disponibilidad</li>
+                                    <li>En caso de cancelación del evento, recibirás reembolso automático</li>
+                                </ul>
+                                <p>Revisa los términos específicos de cada evento antes de comprar.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Hay cargos adicionales al precio de la entrada?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>El precio mostrado incluye todos los cargos aplicables. No hay cargos ocultos. El precio final que ves es el que pagarás. Algunos eventos pueden incluir cargos por servicio o procesamiento, pero estos siempre se muestran claramente antes de completar la compra.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Crear Eventos -->
+                <section class="faq-section" data-category="eventos">
+                    <h2 class="faq-section-title">
+                        <i class="fas fa-calendar-alt"></i> Crear Eventos
+                    </h2>
+                    <div class="faq-accordion">
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Cómo creo un evento en PassTo?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Para crear un evento:</p>
+                                <ol>
+                                    <li>Inicia sesión en tu cuenta de PassTo</li>
+                                    <li>Haz clic en el botón "CREAR EVENTO" en la parte superior</li>
+                                    <li>Completa el formulario con toda la información del evento:
+                                        <ul>
+                                            <li>Nombre y descripción del evento</li>
+                                            <li>Fecha, hora y ubicación</li>
+                                            <li>Tipos de entradas y precios</li>
+                                            <li>Imágenes y videos promocionales</li>
+                                            <li>Términos y condiciones específicos</li>
+                                        </ul>
+                                    </li>
+                                    <li>Revisa y publica tu evento</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Cuánto cuesta crear un evento?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Crear un evento en PassTo es <strong>gratuito</strong>. Solo pagas una comisión sobre las entradas vendidas:</p>
+                                <ul>
+                                    <li><strong>10%</strong> de comisión para eventos con menos de 5,000 entradas vendidas</li>
+                                    <li><strong>8%</strong> de comisión para eventos con 5,000 o más entradas vendidas</li>
+                                </ul>
+                                <p>La comisión se calcula sobre el precio de venta de cada entrada y se deduce automáticamente del monto recaudado.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Puedo editar mi evento después de publicarlo?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Sí, puedes editar tu evento en cualquier momento desde la sección "Mis Eventos". Puedes modificar:</p>
+                                <ul>
+                                    <li>Información del evento (nombre, descripción, ubicación)</li>
+                                    <li>Fechas y horarios (con notificación a compradores)</li>
+                                    <li>Precios y disponibilidad de entradas</li>
+                                    <li>Imágenes y contenido promocional</li>
+                                </ul>
+                                <p>Los cambios significativos (como fecha o ubicación) notificarán automáticamente a los compradores.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Cómo gestiono las ventas de mi evento?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Desde "Mis Eventos" puedes:</p>
+                                <ul>
+                                    <li>Ver estadísticas de ventas en tiempo real</li>
+                                    <li>Monitorear la cantidad de entradas vendidas</li>
+                                    <li>Revisar los ingresos totales</li>
+                                    <li>Gestionar reembolsos cuando sea necesario</li>
+                                    <li>Exportar listas de asistentes</li>
+                                </ul>
+                                <p>Todos los datos se actualizan automáticamente con cada venta.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Cuándo recibo el pago por las entradas vendidas?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Los pagos a organizadores se procesan según el siguiente cronograma:</p>
+                                <ul>
+                                    <li>Los fondos se mantienen en custodia hasta <strong>7 días después de la fecha del evento</strong></li>
+                                    <li>Una vez transcurrido este período, se procesa el pago menos las comisiones aplicables</li>
+                                    <li>El pago se realiza a la cuenta bancaria registrada en tu perfil</li>
+                                    <li>Recibirás una notificación cuando el pago sea procesado</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pagos y Reembolsos -->
+                <section class="faq-section" data-category="pagos">
+                    <h2 class="faq-section-title">
+                        <i class="fas fa-credit-card"></i> Pagos y Reembolsos
+                    </h2>
+                    <div class="faq-accordion">
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Cómo solicito un reembolso?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Para solicitar un reembolso:</p>
+                                <ol>
+                                    <li>Ve a "Mis Tickets" en tu cuenta</li>
+                                    <li>Selecciona el evento del cual deseas reembolso</li>
+                                    <li>Haz clic en "Solicitar Reembolso"</li>
+                                    <li>Completa el formulario con el motivo</li>
+                                    <li>Espera la confirmación del organizador</li>
+                                </ol>
+                                <p>Los reembolsos están sujetos a las políticas del organizador y deben solicitarse antes de la fecha límite establecida.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Cuánto tiempo tarda un reembolso?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>El tiempo de procesamiento de reembolsos varía según el método de pago utilizado:</p>
+                                <ul>
+                                    <li><strong>Tarjetas de crédito/débito:</strong> 5-10 días hábiles</li>
+                                    <li><strong>Transferencias bancarias:</strong> 3-7 días hábiles</li>
+                                    <li><strong>Billeteras digitales:</strong> 1-3 días hábiles</li>
+                                </ul>
+                                <p>Recibirás una notificación por correo cuando el reembolso sea procesado.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Qué pasa si el evento es cancelado?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Si un evento es cancelado por el organizador:</p>
+                                <ul>
+                                    <li>Recibirás una notificación automática por correo electrónico</li>
+                                    <li>Se procesará el reembolso completo automáticamente</li>
+                                    <li>El reembolso se realizará al método de pago original</li>
+                                    <li>No necesitas hacer ninguna acción adicional</li>
+                                </ul>
+                                <p>El proceso de reembolso comienza inmediatamente después de la cancelación.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Puedo transferir mi entrada a otra persona?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Depende de la política del organizador del evento. Algunos eventos permiten la transferencia de entradas, mientras que otros no. Para transferir una entrada:</p>
+                                <ol>
+                                    <li>Ve a "Mis Tickets"</li>
+                                    <li>Selecciona la entrada que deseas transferir</li>
+                                    <li>Si está disponible, verás la opción "Transferir Entrada"</li>
+                                    <li>Ingresa el correo electrónico del nuevo titular</li>
+                                    <li>Confirma la transferencia</li>
+                                </ol>
+                                <p>Si no ves esta opción, significa que el evento no permite transferencias.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Entradas Digitales -->
+                <section class="faq-section" data-category="tickets">
+                    <h2 class="faq-section-title">
+                        <i class="fas fa-ticket-alt"></i> Entradas Digitales
+                    </h2>
+                    <div class="faq-accordion">
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Cómo recibo mis entradas?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Recibirás tus entradas digitales de dos formas:</p>
+                                <ul>
+                                    <li><strong>Por correo electrónico:</strong> Se enviará automáticamente a tu correo registrado después de completar la compra</li>
+                                    <li><strong>En tu cuenta:</strong> Puedes acceder a todas tus entradas desde la sección "Mis Tickets"</li>
+                                </ul>
+                                <p>Cada entrada incluye un código QR único que deberás presentar en el evento.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Necesito imprimir mi entrada?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>No es necesario imprimir tu entrada. Puedes presentar la entrada digital desde tu teléfono móvil o dispositivo. Solo asegúrate de:</p>
+                                <ul>
+                                    <li>Tener la batería cargada</li>
+                                    <li>Tener el código QR visible y legible</li>
+                                    <li>Llegar con tiempo suficiente al evento</li>
+                                </ul>
+                                <p>Si prefieres, también puedes descargar e imprimir la entrada desde tu cuenta.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Qué hago si no recibí mi entrada por correo?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Si no recibiste tu entrada por correo:</p>
+                                <ol>
+                                    <li>Revisa tu carpeta de spam o correo no deseado</li>
+                                    <li>Verifica que el correo registrado sea correcto</li>
+                                    <li>Accede a "Mis Tickets" en tu cuenta de PassTo</li>
+                                    <li>Descarga la entrada directamente desde allí</li>
+                                    <li>Si aún tienes problemas, contacta a soporte</li>
+                                </ol>
+                                <p>Todas tus entradas están disponibles en tu cuenta, incluso si no recibiste el correo.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Puedo usar la misma entrada varias veces?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>No, cada entrada es válida para un solo uso. Una vez que el código QR es escaneado en la entrada del evento, la entrada queda invalidada y no puede ser utilizada nuevamente. Esto previene el uso fraudulento de entradas.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Qué pasa si pierdo mi teléfono o no tengo acceso a mi entrada?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>No te preocupes, puedes acceder a tus entradas desde cualquier dispositivo:</p>
+                                <ul>
+                                    <li>Inicia sesión en tu cuenta de PassTo desde otro dispositivo</li>
+                                    <li>Ve a "Mis Tickets"</li>
+                                    <li>Descarga o muestra la entrada desde allí</li>
+                                </ul>
+                                <p>También puedes contactar al organizador del evento con tu número de compra o correo electrónico para que te ayuden en la entrada.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mi Cuenta -->
+                <section class="faq-section" data-category="cuenta">
+                    <h2 class="faq-section-title">
+                        <i class="fas fa-user"></i> Mi Cuenta
+                    </h2>
+                    <div class="faq-accordion">
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Cómo creo una cuenta en PassTo?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Para crear una cuenta:</p>
+                                <ol>
+                                    <li>Haz clic en "Iniciar Sesión" en la parte superior de la página</li>
+                                    <li>Selecciona la opción "Registrarse" o "Crear Cuenta"</li>
+                                    <li>Completa el formulario con tus datos:
+                                        <ul>
+                                            <li>Nombre completo</li>
+                                            <li>Correo electrónico</li>
+                                            <li>Contraseña segura</li>
+                                        </ul>
+                                    </li>
+                                    <li>Acepta los términos y condiciones</li>
+                                    <li>Confirma tu correo electrónico (si es requerido)</li>
+                                </ol>
+                                <p>¡Listo! Ya puedes comenzar a comprar entradas o crear eventos.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Olvidé mi contraseña, qué hago?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Para recuperar tu contraseña:</p>
+                                <ol>
+                                    <li>Haz clic en "Iniciar Sesión"</li>
+                                    <li>Selecciona "¿Olvidaste tu contraseña?"</li>
+                                    <li>Ingresa tu correo electrónico registrado</li>
+                                    <li>Recibirás un enlace para restablecer tu contraseña</li>
+                                    <li>Sigue las instrucciones en el correo</li>
+                                </ol>
+                                <p>Si no recibes el correo, revisa tu carpeta de spam o contacta a soporte.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Puedo cambiar mi información de cuenta?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Sí, puedes actualizar tu información en cualquier momento:</p>
+                                <ol>
+                                    <li>Inicia sesión en tu cuenta</li>
+                                    <li>Haz clic en tu nombre en la parte superior</li>
+                                    <li>Selecciona "Mi Perfil"</li>
+                                    <li>Edita la información que deseas cambiar</li>
+                                    <li>Guarda los cambios</li>
+                                </ol>
+                                <p>Puedes modificar: nombre, correo electrónico, contraseña, información de contacto y preferencias de notificación.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question">
+                                <span>¿Cómo elimino mi cuenta?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Para eliminar tu cuenta:</p>
+                                <ol>
+                                    <li>Inicia sesión en tu cuenta</li>
+                                    <li>Ve a "Mi Perfil"</li>
+                                    <li>Desplázate hasta "Configuración de Cuenta"</li>
+                                    <li>Selecciona "Eliminar Cuenta"</li>
+                                    <li>Confirma la eliminación</li>
+                                </ol>
+                                <p><strong>Importante:</strong> Al eliminar tu cuenta, perderás acceso a todas tus entradas y eventos. Asegúrate de no tener eventos activos o entradas pendientes antes de eliminar tu cuenta.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sin resultados -->
+                <div class="faq-no-results" id="noResults" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <h3>No se encontraron resultados</h3>
+                    <p>Intenta con otros términos de búsqueda o explora las categorías.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-newsletter">
+                    <div class="newsletter-content">
+                        <h3>¡No te pierdas ningún evento!</h3>
+                        <p>Suscríbete a nuestro newsletter y recibe las mejores ofertas</p>
+                    </div>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Tu correo electrónico" class="newsletter-input" id="newsletterEmail">
+                        <button class="newsletter-btn" onclick="subscribeNewsletter()">
+                            <i class="fas fa-paper-plane"></i>
+                            Suscribirme
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="footer-main">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="logoopassto.svg" alt="PassTo Logo" class="footer-logo-character">
+                        <span>PassTo</span>
+                    </div>
+                    <p class="footer-tagline">Tu pase a experiencias inolvidables. Descubre y compra entradas para los mejores eventos de tu ciudad.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Categorías</h4>
+                    <a href="#"><i class="fas fa-music"></i> Conciertos</a>
+                    <a href="#"><i class="fas fa-basketball"></i> Deportes</a>
+                    <a href="#"><i class="fas fa-masks-theater"></i> Teatro</a>
+                    <a href="#"><i class="fas fa-microphone"></i> Conferencias</a>
+                    <a href="#"><i class="fas fa-palette"></i> Arte</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Empresa</h4>
+                    <a href="historia.html">Sobre Nosotros</a>
+                    <a href="#">Trabaja con Nosotros</a>
+                    <a href="#">Asociados</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Soporte</h4>
+                    <a href="#">Centro de Ayuda</a>
+                    <a href="preguntas-frecuentes.html">Preguntas Frecuentes</a>
+                    <a href="soporte.html">Términos y Condiciones</a>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Contacto</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; 2025 PassTo. Todos los derechos reservados.</p>
+                    <p class="made-with">Hecho con <i class="fas fa-heart"></i> para los amantes de eventos</p>
+                </div>
+                <div class="footer-social">
+                    <span>Síguenos:</span>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link" title="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="faq-script.js"></script>
+</body>
+</html>
+

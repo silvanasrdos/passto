@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Evento - PassTo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="estilos-eventos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="logoopassto.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                    <img src="logoopassto.svg" alt="PassTo Logo" class="logo-character">
+                    <span>PassTo<sup></sup></span>
+                </div>
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.html" class="nav-link" data-page="index">Inicio</a>
+                    <a href="#" class="nav-link" data-page="tickets">Mis Tickets</a>
+                    <a href="historia.html" class="nav-link" data-page="historia">Historia</a>
+                    <a href="mis-eventos.html" class="nav-link" id="misEventosLink" data-page="mis-eventos" style="display: none;">Mis Eventos</a>
+                </nav>
+                <div class="nav-actions">
+                    <button class="icon-btn cart-btn" id="cartBtn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="badge" id="cartBadge">0</span>
+                    </button>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menú">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="user-dropdown desktop-only" id="userDropdown">
+                        <button class="user-dropdown-btn" id="userDropdownBtn">
+                            <span id="userName" class="user-name-text">Iniciar Sesión</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown-menu" id="userDropdownMenu">
+                            <a href="#" onclick="if(currentUser){showUserMenu();}else{showAuthModal('login');} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                            <a href="#" onclick="if(currentUser){logout();}else{showAuthModal('login');} return false;"><i class="fas fa-sign-out-alt"></i> <span id="logoutText">Cerrar Sesión</span></a>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-create-event desktop-only" id="registerBtn">
+                        <span class="btn-create-text">CREAR EVENTO</span>
+                        <i class="fas fa-plus mobile-only"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <span>Menú<sup></sup></span>
+            </div>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-content" id="mobileMenuContent">
+            <!-- Los enlaces se copiarán dinámicamente desde nav-menu -->
+        </div>
+        <div class="mobile-menu-actions">
+            <button class="btn-primary btn-create-event" id="mobileCreateEventBtn">
+                <i class="fas fa-plus"></i>
+                <span>CREAR EVENTO</span>
+            </button>
+            <div class="user-dropdown">
+                <button class="user-dropdown-btn" id="mobileUserDropdownBtn">
+                    <span id="mobileUserName">Iniciar Sesión</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="user-dropdown-menu" id="mobileUserDropdownMenu">
+                    <a href="#" onclick="if(currentUser){showUserMenu();closeMobileMenu();}else{showAuthModal('login');closeMobileMenu();} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
+                    <a href="#" onclick="if(currentUser){logout();closeMobileMenu();}else{showAuthModal('login');closeMobileMenu();} return false;"><i class="fas fa-sign-out-alt"></i> <span id="mobileLogoutText">Cerrar Sesión</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="create-event-main">
+        <div class="container">
+            <div class="create-event-header">
+                <h1 id="formTitle"><i class="fas fa-calendar-plus"></i> Crear Nuevo Evento</h1>
+                <p id="formSubtitle">Completa todos los campos para registrar tu evento en PassTo</p>
+            </div>
+
+            <form id="createEventForm" class="create-event-form">
+                <!-- Información Básica del Evento -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        Información Básica
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label for="eventName">Nombre del Evento <span class="required">*</span></label>
+                        <input type="text" id="eventName" name="eventName" required placeholder="Ej: Festival de Música 2025" maxlength="100">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventType">Tipo de Evento <span class="required">*</span></label>
+                            <select id="eventType" name="eventType" required>
+                                <option value="">Selecciona un tipo</option>
+                                <option value="public">Público</option>
+                                <option value="private">Privado</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventCategory">Categoría <span class="required">*</span></label>
+                            <select id="eventCategory" name="eventCategory" required>
+                                <option value="">Selecciona una categoría</option>
+                                <option value="music">Música</option>
+                                <option value="sports">Deportes</option>
+                                <option value="theater">Teatro</option>
+                                <option value="conference">Conferencias</option>
+                                <option value="art">Arte</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mainArtists">Artistas Principales <span class="optional">(Opcional)</span></label>
+                        <input type="text" id="mainArtists" name="mainArtists" placeholder="Ej: Artista 1, Artista 2, Artista 3">
+                        <small class="form-hint">Separa los artistas con comas</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDescription">Descripción del Evento <span class="required">*</span></label>
+                        <textarea id="eventDescription" name="eventDescription" rows="5" required placeholder="Describe tu evento, incluye información sobre actividades, beneficios, experiencias..."></textarea>
+                    </div>
+                </section>
+
+                <!-- Fechas y Horarios -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        Fechas y Horarios
+                    </h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="startDate">Fecha y Hora de Inicio <span class="required">*</span></label>
+                            <input type="datetime-local" id="startDate" name="startDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="endDate">Fecha y Hora de Fin <span class="required">*</span></label>
+                            <input type="datetime-local" id="endDate" name="endDate" required>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ubicación -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Ubicación
+                    </h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="province">Provincia <span class="required">*</span></label>
+                            <select id="province" name="province" required>
+                                <option value="">Selecciona una provincia</option>
+                                <option value="Chaco">Chaco</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="locality">Localidad <span class="required">*</span></label>
+                            <select id="locality" name="locality" required>
+                                <option value="">Selecciona una localidad</option>
+                                <option value="Roque Sáenz Peña">Roque Sáenz Peña</option>
+                                <option value="Resistencia">Resistencia</option>
+                                <option value="Avia Terai">Avia Terai</option>
+                                <option value="Presidencia de la Plaza">Presidencia de la Plaza</option>
+                                <option value="Charata">Charata</option>
+                                <option value="Castelli">Castelli</option>
+                                <option value="Quitilipi">Quitilipi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="venue">Lugar/Venue <span class="required">*</span></label>
+                        <input type="text" id="venue" name="venue" required placeholder="Ej: Estadio Central, Teatro Municipal">
+                    </div>
+                </section>
+
+                <!-- Multimedia -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-images"></i>
+                        Multimedia <span class="optional">(Opcional)</span>
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label for="eventVideo">Video del Evento</label>
+                        <input type="url" id="eventVideo" name="eventVideo" placeholder="https://youtube.com/watch?v=... o https://vimeo.com/...">
+                        <small class="form-hint">URL de YouTube o Vimeo</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventPhotos">Fotos del Evento</label>
+                        <input type="file" id="eventPhotos" name="eventPhotos" accept="image/*" multiple>
+                        <small class="form-hint">Puedes seleccionar múltiples imágenes (JPG, PNG, máx. 5MB cada una)</small>
+                        <div id="photoPreview" class="photo-preview"></div>
+                    </div>
+                </section>
+
+                <!-- Configuración de eTickets -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-ticket-alt"></i>
+                        Configuración de eTickets
+                    </h2>
+                    
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="eticketWeb" name="eticketWeb" checked>
+                            <span>Disponible en web</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="eticketEmail" name="eticketEmail" checked>
+                            <span>Enviar por correo electrónico</span>
+                        </label>
+                    </div>
+                </section>
+
+                <!-- Tipos de Entrada -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-tags"></i>
+                        Tipos de Entrada
+                    </h2>
+                    
+                    <div id="ticketTypesContainer">
+                        <!-- Los tipos de entrada se agregarán dinámicamente -->
+                    </div>
+
+                    <button type="button" class="btn-add-ticket-type" id="addTicketTypeBtn">
+                        <i class="fas fa-plus"></i>
+                        Agregar Tipo de Entrada
+                    </button>
+                </section>
+
+                <!-- Restricción de Edad -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-user-shield"></i>
+                        Restricción de Edad
+                    </h2>
+                    
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="ageRestriction" name="ageRestriction">
+                            <span>Habilitar restricción de edad</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group" id="ageSelectWrapper" style="display: none;">
+                        <label for="minAge">Edad Mínima</label>
+                        <select id="minAge" name="minAge">
+                            <option value="">Sin restricción</option>
+                            <option value="13">13 años</option>
+                            <option value="16">16 años</option>
+                            <option value="18">18 años</option>
+                            <option value="21">21 años</option>
+                        </select>
+                    </div>
+                </section>
+
+                <!-- Términos y Condiciones -->
+                <section class="form-section">
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label required-checkbox">
+                            <input type="checkbox" id="termsCheckbox" name="termsCheckbox" required>
+                            <span>Acepto los <a href="soporte.html" target="_blank">términos y condiciones</a> de PassTo <span class="required">*</span></span>
+                        </label>
+                    </div>
+                </section>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="window.location.href='index.html'">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-check"></i>
+                        Crear Evento
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-newsletter">
+                    <div class="newsletter-content">
+                        <h3>¡No te pierdas ningún evento!</h3>
+                        <p>Suscríbete a nuestro newsletter y recibe las mejores ofertas</p>
+                    </div>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Tu correo electrónico" class="newsletter-input" id="newsletterEmail">
+                        <button class="newsletter-btn" onclick="subscribeNewsletter()">
+                            <i class="fas fa-paper-plane"></i>
+                            Suscribirme
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="footer-main">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="logoopassto.svg" alt="PassTo Logo" class="footer-logo-character">
+                        <span>PassTo</span>
+                    </div>
+                    <p class="footer-tagline">Tu pase a experiencias inolvidables. Descubre y compra entradas para los mejores eventos de tu ciudad.</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; 2025 PassTo. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="evento.js"></script>
+</body>
+</html>
+
