@@ -1845,6 +1845,12 @@ function setupEventListeners() {
             currentCategory = chip.dataset.category;
             
             applyFilters();
+            
+            // Scroll to events section
+            const eventsSection = document.querySelector('.events-section');
+            if (eventsSection) {
+                window.scrollTo({ top: eventsSection.offsetTop - 100, behavior: 'smooth' });
+            }
         });
     });
     
@@ -1867,11 +1873,6 @@ function showUserMenu() {
             </div>
             
             <div style="max-width: 400px; margin: 0 auto; display: grid; gap: 12px;">
-                <button onclick="showMyTicketsModal()" class="btn-primary" style="width: 100%; padding: 16px; justify-content: center;">
-                    <i class="fas fa-ticket"></i>
-                    Mis Entradas (${myTickets.length})
-                </button>
-                
                 <button onclick="showUserProfile()" class="btn-primary" style="width: 100%; padding: 16px; justify-content: center; background: var(--text-secondary);">
                     <i class="fas fa-user-edit"></i>
                     Editar Perfil

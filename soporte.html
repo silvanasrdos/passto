@@ -29,7 +29,7 @@
                         <i class="fas fa-shopping-bag"></i>
                         <span class="badge" id="cartBadge">0</span>
                     </button>
-                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menú">
+                    <button class="hamburger-menu-toggle" id="hamburgerMenuToggle" aria-label="Menú">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -53,36 +53,74 @@
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <!-- Hamburger Menu Overlay -->
+    <div class="hamburger-menu-overlay" id="hamburgerMenuOverlay"></div>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
+    <!-- Hamburger Menu -->
+    <div class="hamburger-menu" id="hamburgerMenu">
+        <div class="hamburger-menu-header">
             <div class="logo">
                 <span>Menú<sup></sup></span>
             </div>
-            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
+            <button class="hamburger-menu-close" id="hamburgerMenuClose" aria-label="Cerrar menú">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <div class="mobile-menu-content" id="mobileMenuContent">
-            <!-- Los enlaces se copiarán dinámicamente desde nav-menu -->
-        </div>
-        <div class="mobile-menu-actions">
-            <button class="btn-primary btn-create-event" id="mobileCreateEventBtn">
-                <i class="fas fa-plus"></i>
-                <span>CREAR EVENTO</span>
-            </button>
-            <div class="user-dropdown">
-                <button class="user-dropdown-btn" id="mobileUserDropdownBtn">
-                    <span id="mobileUserName">Iniciar Sesión</span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="user-dropdown-menu" id="mobileUserDropdownMenu">
-                    <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof showUserMenu === 'function'){showUserMenu();closeMobileMenu();}else{showNotification('Función no disponible');closeMobileMenu();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');closeMobileMenu();}else{window.location.href='index.html';}} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
-                    <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof logout === 'function'){logout();closeMobileMenu();}else{localStorage.removeItem('currentUser');window.location.reload();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');closeMobileMenu();}else{window.location.href='index.html';}} return false;"><i class="fas fa-sign-out-alt"></i> <span id="mobileLogoutText">Cerrar Sesión</span></a>
-                </div>
+        <div class="hamburger-menu-content">
+            <div class="hamburger-menu-item">
+                <a href="index.html" onclick="closeHamburgerMenu(); return true;">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item">
+                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){window.location.href='mistickets.html';}else{showAuthModal('login');} return false;">
+                    <i class="fas fa-ticket"></i>
+                    <span>Mis Tickets</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item">
+                <a href="historia.html" onclick="closeHamburgerMenu(); return true;">
+                    <i class="fas fa-book"></i>
+                    <span>Historia</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item" id="hamburgerMisEventosItem" style="display: none;">
+                <a href="mis-eventos.html" onclick="closeHamburgerMenu(); return true;">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Mis Eventos</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-divider"></div>
+            <div class="hamburger-menu-item" id="hamburgerLoginItem">
+                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){showUserMenu();}else{showAuthModal('login');} return false;">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span id="hamburgerLoginText">Iniciar Sesión</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item" id="hamburgerRegisterItem" style="display: none;">
+                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){showUserMenu();}else{showAuthModal('register');} return false;">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Registrarse</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item">
+                <a href="#" onclick="closeHamburgerMenu(); startCreateEventFlow(); return false;">
+                    <i class="fas fa-plus"></i>
+                    <span>CREAR EVENTO</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item" id="hamburgerProfileItem" style="display: none;">
+                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){showUserMenu();}else{showAuthModal('login');} return false;">
+                    <i class="fas fa-user"></i>
+                    <span>Mi Perfil</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item" id="hamburgerLogoutItem" style="display: none;">
+                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){logout();}else{showAuthModal('login');} return false;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span id="hamburgerLogoutText">Cerrar Sesión</span>
+                </a>
             </div>
         </div>
     </div>
@@ -115,6 +153,8 @@
                         <li><a href="#modificaciones">13. Modificaciones de los Términos</a></li>
                         <li><a href="#ley-aplicable">14. Ley Aplicable y Jurisdicción</a></li>
                         <li><a href="#contacto">15. Contacto</a></li>
+                        <li><a href="#politica-privacidad">16. Política de Privacidad</a></li>
+                        <li><a href="#contacto-completo">17. Centro de Contacto</a></li>
                     </ul>
                 </div>
 
@@ -300,10 +340,14 @@
                     <h3>6.2. Pagos a Organizadores</h3>
                     <p>Los pagos a organizadores se realizarán según el siguiente cronograma:</p>
                     <ul>
-                        <li>Los fondos se mantendrán en custodia hasta 7 días después de la fecha del evento</li>
-                        <li>Una vez transcurrido este período, se procesará el pago menos las comisiones aplicables</li>
+                        <li>Los fondos se mantendrán en custodia hasta 3 días hábiles después de la fecha del evento para proteger a los compradores y permitir la resolución de cualquier disputa o reembolso necesario</li>
+                        <li>Una vez transcurrido este período sin reclamaciones, se procesará el pago menos las comisiones aplicables</li>
                         <li>Los organizadores deben proporcionar información bancaria válida para recibir pagos</li>
+                        <li>En caso de eventos sin incidentes reportados, el pago puede procesarse antes del período de custodia</li>
                     </ul>
+                    <div class="payment-note">
+                        <p><strong>Nota:</strong> Este período de custodia protege tanto a compradores como a organizadores, permitiendo resolver cualquier problema relacionado con el evento antes de liberar los fondos.</p>
+                    </div>
                 </section>
 
                 <!-- Sección 7: Reembolsos -->
@@ -463,6 +507,303 @@
                     </div>
                 </section>
 
+                <!-- Sección 16: Política de Privacidad Completa -->
+                <section id="politica-privacidad" class="terms-section highlight-section">
+                    <h2><span class="section-number">16.</span> Política de Privacidad</h2>
+                    <p class="privacy-intro">En PassTo, nos comprometemos a proteger su privacidad y garantizar la seguridad de sus datos personales. Esta Política de Privacidad explica cómo recopilamos, utilizamos, almacenamos y protegemos su información personal.</p>
+
+                    <h3>16.1. Información que Recopilamos</h3>
+                    <p>Recopilamos los siguientes tipos de información:</p>
+                    
+                    <div class="privacy-categories">
+                        <div class="privacy-category">
+                            <h4><i class="fas fa-user"></i> Información de Registro</h4>
+                            <ul>
+                                <li>Nombre completo</li>
+                                <li>Dirección de correo electrónico</li>
+                                <li>Número de teléfono</li>
+                                <li>Contraseña (encriptada)</li>
+                                <li>Fecha de nacimiento (si aplica)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="privacy-category">
+                            <h4><i class="fas fa-credit-card"></i> Información de Pago</h4>
+                            <ul>
+                                <li>Datos de tarjeta de crédito/débito (procesados de forma segura)</li>
+                                <li>Información de facturación</li>
+                                <li>Historial de transacciones</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="privacy-category">
+                            <h4><i class="fas fa-ticket-alt"></i> Información de Eventos</h4>
+                            <ul>
+                                <li>Eventos que ha comprado o en los que está interesado</li>
+                                <li>Preferencias de categorías de eventos</li>
+                                <li>Ubicación geográfica (provincia/localidad)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="privacy-category">
+                            <h4><i class="fas fa-laptop"></i> Información Técnica</h4>
+                            <ul>
+                                <li>Dirección IP</li>
+                                <li>Tipo de navegador y dispositivo</li>
+                                <li>Cookies y tecnologías similares</li>
+                                <li>Registros de actividad en la plataforma</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>16.2. Cómo Utilizamos su Información</h3>
+                    <p>Utilizamos su información personal para los siguientes propósitos:</p>
+                    <ul>
+                        <li><strong>Procesamiento de Transacciones:</strong> Para procesar sus compras de entradas y gestionar pagos</li>
+                        <li><strong>Gestión de Cuenta:</strong> Para crear y mantener su cuenta de usuario</li>
+                        <li><strong>Comunicación:</strong> Para enviarle confirmaciones de compra, actualizaciones de eventos y respuestas a sus consultas</li>
+                        <li><strong>Mejora del Servicio:</strong> Para analizar el uso de la plataforma y mejorar nuestros servicios</li>
+                        <li><strong>Personalización:</strong> Para recomendar eventos que puedan ser de su interés</li>
+                        <li><strong>Cumplimiento Legal:</strong> Para cumplir con obligaciones legales y regulatorias</li>
+                        <li><strong>Seguridad:</strong> Para prevenir fraudes y proteger la seguridad de nuestros usuarios</li>
+                    </ul>
+
+                    <h3>16.3. Compartir Información con Terceros</h3>
+                    <p>PassTo no vende ni alquila su información personal. Compartimos información únicamente en las siguientes circunstancias:</p>
+                    <ul>
+                        <li><strong>Organizadores de Eventos:</strong> Compartimos información necesaria (nombre, email) con los organizadores de eventos para los que ha comprado entradas</li>
+                        <li><strong>Proveedores de Servicios:</strong> Con empresas que nos ayudan a operar (procesadores de pago, servicios de hosting, análisis)</li>
+                        <li><strong>Cumplimiento Legal:</strong> Cuando sea requerido por ley o para proteger nuestros derechos legales</li>
+                        <li><strong>Con su Consentimiento:</strong> En cualquier otra situación con su consentimiento explícito</li>
+                    </ul>
+
+                    <h3>16.4. Cookies y Tecnologías Similares</h3>
+                    <p>Utilizamos cookies y tecnologías similares para:</p>
+                    <ul>
+                        <li>Mantener su sesión activa</li>
+                        <li>Recordar sus preferencias</li>
+                        <li>Analizar el tráfico del sitio</li>
+                        <li>Mejorar la experiencia del usuario</li>
+                    </ul>
+                    <p>Puede gestionar sus preferencias de cookies a través de la configuración de su navegador.</p>
+
+                    <h3>16.5. Seguridad de los Datos</h3>
+                    <p>Implementamos medidas de seguridad técnicas y organizativas para proteger su información:</p>
+                    <ul>
+                        <li>Encriptación SSL/TLS para todas las transmisiones de datos</li>
+                        <li>Almacenamiento seguro de contraseñas (hashing)</li>
+                        <li>Acceso restringido a datos personales solo para personal autorizado</li>
+                        <li>Monitoreo regular de seguridad y auditorías</li>
+                        <li>Cumplimiento con estándares de seguridad de la industria</li>
+                    </ul>
+
+                    <h3>16.6. Sus Derechos</h3>
+                    <p>Usted tiene los siguientes derechos respecto a sus datos personales:</p>
+                    <div class="rights-grid">
+                        <div class="right-item">
+                            <i class="fas fa-eye"></i>
+                            <strong>Derecho de Acceso:</strong> Puede solicitar una copia de sus datos personales
+                        </div>
+                        <div class="right-item">
+                            <i class="fas fa-edit"></i>
+                            <strong>Derecho de Rectificación:</strong> Puede corregir información inexacta
+                        </div>
+                        <div class="right-item">
+                            <i class="fas fa-trash"></i>
+                            <strong>Derecho de Eliminación:</strong> Puede solicitar la eliminación de sus datos
+                        </div>
+                        <div class="right-item">
+                            <i class="fas fa-ban"></i>
+                            <strong>Derecho de Oposición:</strong> Puede oponerse al procesamiento de sus datos
+                        </div>
+                        <div class="right-item">
+                            <i class="fas fa-download"></i>
+                            <strong>Derecho de Portabilidad:</strong> Puede solicitar la transferencia de sus datos
+                        </div>
+                        <div class="right-item">
+                            <i class="fas fa-hand-paper"></i>
+                            <strong>Derecho de Limitación:</strong> Puede solicitar la limitación del procesamiento
+                        </div>
+                    </div>
+                    <p>Para ejercer estos derechos, puede contactarnos en <a href="mailto:privacidad@passto.com">privacidad@passto.com</a></p>
+
+                    <h3>16.7. Retención de Datos</h3>
+                    <p>Conservamos su información personal durante el tiempo necesario para cumplir con los propósitos descritos en esta política, a menos que la ley requiera o permita un período de retención más largo. Los datos de transacciones se conservan según los requisitos legales y contables.</p>
+
+                    <h3>16.8. Menores de Edad</h3>
+                    <p>Nuestra plataforma está dirigida a usuarios mayores de 18 años. No recopilamos intencionalmente información de menores de edad. Si descubrimos que hemos recopilado información de un menor, tomaremos medidas para eliminar esa información.</p>
+
+                    <h3>16.9. Cambios a esta Política</h3>
+                    <p>Podemos actualizar esta Política de Privacidad ocasionalmente. Le notificaremos sobre cambios significativos mediante correo electrónico o mediante un aviso en nuestra plataforma. La fecha de "Última actualización" al inicio de esta política indica cuándo se realizó la última revisión.</p>
+
+                    <h3>16.10. Contacto sobre Privacidad</h3>
+                    <p>Si tiene preguntas o inquietudes sobre esta Política de Privacidad o sobre cómo manejamos sus datos personales, puede contactarnos:</p>
+                    <div class="contact-info">
+                        <div class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <strong>Email de Privacidad:</strong>
+                                <a href="mailto:privacidad@passto.com">privacidad@passto.com</a>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <strong>Teléfono:</strong>
+                                <span>+54 (555) 123-4567</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección 17: Centro de Contacto Completo -->
+                <section id="contacto-completo" class="terms-section">
+                    <h2><span class="section-number">17.</span> Centro de Contacto</h2>
+                    <p class="contact-intro">Estamos aquí para ayudarte. Puedes contactarnos a través de cualquiera de los siguientes medios o utilizar nuestro formulario de contacto.</p>
+
+                    <div class="contact-sections-grid">
+                        <!-- Información de Contacto -->
+                        <div class="contact-section-card">
+                            <h3><i class="fas fa-info-circle"></i> Información de Contacto</h3>
+                            <div class="contact-info-detailed">
+                                <div class="contact-method">
+                                    <i class="fas fa-envelope"></i>
+                                    <div>
+                                        <strong>Email General:</strong>
+                                        <a href="mailto:info@passto.com">info@passto.com</a>
+                                    </div>
+                                </div>
+                                <div class="contact-method">
+                                    <i class="fas fa-gavel"></i>
+                                    <div>
+                                        <strong>Email Legal:</strong>
+                                        <a href="mailto:legal@passto.com">legal@passto.com</a>
+                                    </div>
+                                </div>
+                                <div class="contact-method">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <div>
+                                        <strong>Email Privacidad:</strong>
+                                        <a href="mailto:privacidad@passto.com">privacidad@passto.com</a>
+                                    </div>
+                                </div>
+                                <div class="contact-method">
+                                    <i class="fas fa-phone"></i>
+                                    <div>
+                                        <strong>Teléfono:</strong>
+                                        <span>+54 (555) 123-4567</span>
+                                    </div>
+                                </div>
+                                <div class="contact-method">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <div>
+                                        <strong>Dirección:</strong>
+                                        <span>Presidencia Roque Sáenz Peña, Chaco, Argentina</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Horarios de Atención -->
+                        <div class="contact-section-card">
+                            <h3><i class="fas fa-clock"></i> Horarios de Atención</h3>
+                            <div class="hours-info">
+                                <div class="hours-item">
+                                    <strong>Lunes a Viernes:</strong>
+                                    <span>9:00 AM - 6:00 PM</span>
+                                </div>
+                                <div class="hours-item">
+                                    <strong>Sábados:</strong>
+                                    <span>10:00 AM - 2:00 PM</span>
+                                </div>
+                                <div class="hours-item">
+                                    <strong>Domingos:</strong>
+                                    <span>Cerrado</span>
+                                </div>
+                                <div class="hours-note">
+                                    <i class="fas fa-info-circle"></i>
+                                    <p>Para consultas urgentes relacionadas con eventos, nuestro equipo está disponible 24/7 a través de email.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulario de Contacto -->
+                    <div class="contact-form-wrapper">
+                        <h3><i class="fas fa-paper-plane"></i> Envíanos un Mensaje</h3>
+                        <form class="contact-form" id="contactForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contactName">Nombre Completo <span class="required">*</span></label>
+                                    <input type="text" id="contactName" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactEmail">Email <span class="required">*</span></label>
+                                    <input type="email" id="contactEmail" name="email" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contactPhone">Teléfono</label>
+                                    <input type="tel" id="contactPhone" name="phone">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactSubject">Asunto <span class="required">*</span></label>
+                                    <select id="contactSubject" name="subject" required>
+                                        <option value="">Seleccione un asunto</option>
+                                        <option value="soporte">Soporte Técnico</option>
+                                        <option value="eventos">Consulta sobre Eventos</option>
+                                        <option value="pagos">Consulta sobre Pagos</option>
+                                        <option value="cuenta">Problemas con mi Cuenta</option>
+                                        <option value="organizador">Soy Organizador de Eventos</option>
+                                        <option value="legal">Consulta Legal</option>
+                                        <option value="privacidad">Privacidad y Datos</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage">Mensaje <span class="required">*</span></label>
+                                <textarea id="contactMessage" name="message" rows="6" required placeholder="Escribe tu mensaje aquí..."></textarea>
+                            </div>
+                            <div class="form-group checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="contactConsent" name="consent" required>
+                                    <span>Acepto que PassTo procese mis datos personales para responder a mi consulta. <a href="#politica-privacidad">Ver Política de Privacidad</a></span>
+                                </label>
+                            </div>
+                            <button type="submit" class="btn-contact-submit">
+                                <i class="fas fa-paper-plane"></i>
+                                Enviar Mensaje
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Preguntas Frecuentes Rápidas -->
+                    <div class="faq-quick-links">
+                        <h3><i class="fas fa-question-circle"></i> Preguntas Frecuentes</h3>
+                        <p>Antes de contactarnos, consulta nuestras preguntas frecuentes:</p>
+                        <div class="faq-links-grid">
+                            <a href="preguntas-frecuentes.html" class="faq-link-card">
+                                <i class="fas fa-ticket-alt"></i>
+                                <span>Preguntas sobre Entradas</span>
+                            </a>
+                            <a href="preguntas-frecuentes.html" class="faq-link-card">
+                                <i class="fas fa-credit-card"></i>
+                                <span>Preguntas sobre Pagos</span>
+                            </a>
+                            <a href="preguntas-frecuentes.html" class="faq-link-card">
+                                <i class="fas fa-user"></i>
+                                <span>Preguntas sobre Cuenta</span>
+                            </a>
+                            <a href="preguntas-frecuentes.html" class="faq-link-card">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Preguntas sobre Eventos</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Aceptación Final -->
                 <div class="acceptance-box">
                     <h3><i class="fas fa-check-circle"></i> Aceptación de los Términos</h3>
@@ -525,8 +866,8 @@
                     <a href="#">Centro de Ayuda</a>
                     <a href="preguntas-frecuentes.html">Preguntas Frecuentes</a>
                     <a href="soporte.html">Términos y Condiciones</a>
-                    <a href="#">Política de Privacidad</a>
-                    <a href="#">Contacto</a>
+                    <a href="soporte.html#politica-privacidad">Política de Privacidad</a>
+                    <a href="soporte.html#contacto-completo">Contacto</a>
                 </div>
             </div>
             

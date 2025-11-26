@@ -29,7 +29,7 @@
                         <i class="fas fa-shopping-bag"></i>
                         <span class="badge" id="cartBadge">0</span>
                     </button>
-                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menú">
+                    <button class="hamburger-menu-toggle" id="hamburgerMenuToggle" aria-label="Menú">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -54,37 +54,74 @@
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <!-- Hamburger Menu Overlay -->
+    <div class="hamburger-menu-overlay" id="hamburgerMenuOverlay"></div>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
+    <!-- Hamburger Menu -->
+    <div class="hamburger-menu" id="hamburgerMenu">
+        <div class="hamburger-menu-header">
             <div class="logo">
                 <span>Menú<sup></sup></span>
             </div>
-            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
+            <button class="hamburger-menu-close" id="hamburgerMenuClose" aria-label="Cerrar menú">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <div class="mobile-menu-content" id="mobileMenuContent">
-            <!-- Los enlaces se copiarán dinámicamente desde nav-menu -->
-        </div>
-        <div class="mobile-menu-actions">
-            <button class="btn-primary btn-create-event" id="mobileCreateEventBtn">
-                <i class="fas fa-plus"></i>
-                <span>CREAR EVENTO</span>
-            </button>
-            <div class="user-dropdown">
-                <button class="user-dropdown-btn" id="mobileUserDropdownBtn">
-                    <span id="mobileUserName">Iniciar Sesión</span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="user-dropdown-menu" id="mobileUserDropdownMenu">
-                    <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof showUserMenu === 'function'){showUserMenu();closeMobileMenu();}else{showNotification('Función no disponible');closeMobileMenu();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');closeMobileMenu();}else{window.location.href='index.html';}} return false;"><i class="fas fa-user"></i> Mi Perfil</a>
-                    <a href="mistickets.html" onclick="closeMobileMenu();"><i class="fas fa-ticket"></i> Mis Entradas</a>
-                    <a href="#" onclick="if(typeof window.currentUser !== 'undefined' && window.currentUser){if(typeof logout === 'function'){logout();closeMobileMenu();}else{localStorage.removeItem('currentUser');window.location.reload();}}else{if(typeof showAuthModal === 'function'){showAuthModal('login');closeMobileMenu();}else{window.location.href='index.html';}} return false;"><i class="fas fa-sign-out-alt"></i> <span id="mobileLogoutText">Cerrar Sesión</span></a>
-                </div>
+        <div class="hamburger-menu-content">
+            <div class="hamburger-menu-item">
+                <a href="index.html" onclick="closeHamburgerMenu(); return true;">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item">
+                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){window.location.href='mistickets.html';}else{showAuthModal('login');} return false;">
+                    <i class="fas fa-ticket"></i>
+                    <span>Mis Tickets</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item">
+                <a href="historia.html" onclick="closeHamburgerMenu(); return true;">
+                    <i class="fas fa-book"></i>
+                    <span>Historia</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item" id="hamburgerMisEventosItem" style="display: none;">
+                <a href="mis-eventos.html" onclick="closeHamburgerMenu(); return true;">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Mis Eventos</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-divider"></div>
+            <div class="hamburger-menu-item" id="hamburgerLoginItem">
+                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){showUserMenu();}else{showAuthModal('login');} return false;">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span id="hamburgerLoginText">Iniciar Sesión</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item" id="hamburgerRegisterItem" style="display: none;">
+                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){showUserMenu();}else{showAuthModal('register');} return false;">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Registrarse</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item">
+                <a href="#" onclick="closeHamburgerMenu(); startCreateEventFlow(); return false;">
+                    <i class="fas fa-plus"></i>
+                    <span>CREAR EVENTO</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item" id="hamburgerProfileItem" style="display: none;">
+                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){showUserMenu();}else{showAuthModal('login');} return false;">
+                    <i class="fas fa-user"></i>
+                    <span>Mi Perfil</span>
+                </a>
+            </div>
+            <div class="hamburger-menu-item" id="hamburgerLogoutItem" style="display: none;">
+                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){logout();}else{showAuthModal('login');} return false;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span id="hamburgerLogoutText">Cerrar Sesión</span>
+                </a>
             </div>
         </div>
     </div>
