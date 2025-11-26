@@ -472,6 +472,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof window.setActiveNavLink === 'function') {
         window.setActiveNavLink();
     }
+    
+    // Manejar el botón "atrás" del navegador para cerrar modales
+    window.addEventListener('popstate', function(event) {
+        const modal = document.getElementById('eventModal');
+        if (modal && modal.classList.contains('active')) {
+            // Cerrar el modal cuando el usuario presiona "atrás"
+            modal.classList.remove('active');
+            modal.style.zIndex = '';
+        }
+        
+        // También cerrar otros modales si están abiertos
+        const ticketModal = document.getElementById('ticketModal');
+        if (ticketModal && ticketModal.classList.contains('active')) {
+            ticketModal.classList.remove('active');
+        }
+    });
 });
 
 // Render Events
@@ -574,6 +590,11 @@ function openEventModal(eventId) {
             </button>
         </div>
     `;
+    
+    // Agregar entrada al historial para manejar el botón "atrás" en móviles
+    if (window.history && window.history.pushState) {
+        window.history.pushState({ modalOpen: true, eventId: eventId }, '', window.location.href);
+    }
     
     modal.classList.add('active');
 }
@@ -712,9 +733,9 @@ function updateCart() {
             totalAmount.textContent = '$0.00';
         }
     } else {
-        let total = 0;
+        let subtotal = 0;
         cartItems.innerHTML = cart.map((item, index) => {
-            total += item.price;
+            subtotal += item.price;
             return `
                 <div class="cart-item">
                     <div class="cart-item-header">
@@ -733,6 +754,24 @@ function updateCart() {
                 </div>
             `;
         }).join('');
+        
+        // Calcular cargo de servicio (10%)
+        const serviceCharge = subtotal * 0.10;
+        const total = subtotal + serviceCharge;
+        
+        // Agregar desglose del total en el carrito
+        cartItems.innerHTML += `
+            <div style="padding: 16px; border-top: 2px solid var(--border-color); margin-top: 16px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-secondary);">
+                    <span>Subtotal:</span>
+                    <span>$${subtotal.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-secondary);">
+                    <span>Cargo de servicio (10%):</span>
+                    <span>$${serviceCharge.toFixed(2)}</span>
+                </div>
+            </div>
+        `;
         
         totalAmount.textContent = `$${total.toFixed(2)}`;
     }
@@ -931,7 +970,9 @@ function showPaymentModal() {
         const modal = document.getElementById('eventModal');
         const modalBody = document.getElementById('modalBody');
         
-        const total = cart.reduce((sum, item) => sum + item.price, 0);
+        const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+        const serviceCharge = subtotal * 0.10; // 10% cargo de servicio
+        const total = subtotal + serviceCharge;
         
         modalBody.innerHTML = `
         <div class="event-detail-content" style="padding: 60px 40px;">
@@ -951,6 +992,20 @@ function showPaymentModal() {
                         <span style="font-weight: 600;">$${item.price.toFixed(2)}</span>
                     </div>
                 `).join('')}
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 2px solid rgba(0,0,0,0.1);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-secondary);">
+                        <span>Subtotal:</span>
+                        <span>$${subtotal.toFixed(2)}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-secondary);">
+                        <span>Cargo de servicio (10%):</span>
+                        <span>$${serviceCharge.toFixed(2)}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 2px solid rgba(0,0,0,0.1); font-size: 18px; font-weight: 700; color: var(--primary-color);">
+                        <span>Total:</span>
+                        <span>$${total.toFixed(2)}</span>
+                    </div>
+                </div>
             </div>
             
             <form id="paymentForm" onsubmit="processPayment(event)" style="max-width: 500px; margin: 0 auto;">
@@ -1098,7 +1153,9 @@ function switchPaymentMethod(method) {
     const transferLabel = document.getElementById('paymentMethodTransfer');
     const submitBtn = document.getElementById('submitPaymentBtn');
     const submitText = document.getElementById('submitPaymentText');
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    const serviceCharge = subtotal * 0.10; // 10% cargo de servicio
+    const total = subtotal + serviceCharge;
     
     if (method === 'card') {
         cardForm.style.display = 'block';
@@ -2006,6 +2063,11 @@ function closeEventModal() {
     modal.classList.remove('active');
     // Restaurar z-index por defecto
     modal.style.zIndex = '';
+    
+    // Si hay una entrada en el historial para el modal, reemplazarla con la entrada actual (sin modal)
+    if (window.history && window.history.state && window.history.state.modalOpen) {
+        window.history.replaceState({ modalOpen: false }, '', window.location.href);
+    }
 }
 
 function closeTicketModal() {
