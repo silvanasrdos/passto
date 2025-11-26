@@ -1,6 +1,38 @@
 // Estado del formulario
 let ticketTypeCounter = 0;
 
+// Función global para toggle del checkbox (debe estar disponible inmediatamente)
+function toggleAgeRestrictionDisplay(checkbox) {
+    const ageSelectWrapper = document.getElementById('ageSelectWrapper');
+    const minAgeSelect = document.getElementById('minAge');
+    
+    if (!ageSelectWrapper || !minAgeSelect) {
+        console.error('Elementos no encontrados:', { ageSelectWrapper, minAgeSelect });
+        return;
+    }
+    
+    if (checkbox.checked) {
+        ageSelectWrapper.style.display = 'block';
+        ageSelectWrapper.style.setProperty('display', 'block', 'important');
+        minAgeSelect.setAttribute('required', 'required');
+    } else {
+        ageSelectWrapper.style.display = 'none';
+        ageSelectWrapper.style.setProperty('display', 'none', 'important');
+        minAgeSelect.value = '';
+        minAgeSelect.removeAttribute('required');
+    }
+}
+
+// Hacer función disponible globalmente inmediatamente
+window.toggleAgeRestrictionDisplay = toggleAgeRestrictionDisplay;
+
+// Delegación de eventos para el checkbox de restricción de edad (funciona incluso si se carga después)
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'ageRestriction') {
+        toggleAgeRestrictionDisplay(e.target);
+    }
+});
+
 // Inicialización
 document.addEventListener('DOMContentLoaded', function() {
     checkUserAuth();
@@ -175,49 +207,20 @@ function loadEventForEditing(eventId) {
         });
     }
     
-    // Limpiar tipos de entrada existentes
-    const container = document.getElementById('ticketTypesContainer');
-    if (container) {
-        container.innerHTML = '';
-        ticketTypeCounter = 0;
-    }
-    
-    // Cargar tipos de entrada
+    // Cargar tipos de entrada en los campos fijos
     if (event.tickets && event.tickets.length > 0) {
-        event.tickets.forEach((ticket, ticketIndex) => {
-            addTicketType();
-            const index = ticketTypeCounter;
-            
-            // Llenar datos del ticket
-            const typeSelect = document.querySelector(`select[name="ticketType_${index}"]`);
-            const priceInput = document.querySelector(`input[name="ticketPrice_${index}"]`);
-            const descTextarea = document.querySelector(`textarea[name="ticketDescription_${index}"]`);
-            const qtyInput = document.querySelector(`input[name="ticketQuantity_${index}"]`);
-            const limitInput = document.querySelector(`input[name="ticketSaleLimit_${index}"]`);
-            const ticketImageInput = document.querySelector(`input[name="ticketImage_${index}"]`);
-            const ticketPreview = document.getElementById(`ticketPreview_${index}`);
-            
-            if (typeSelect) typeSelect.value = ticket.type || '';
+        event.tickets.forEach((ticket) => {
+            const typeName = ticket.type;
+            if (typeName && ['General', 'VIP', 'Familiar', 'Niños'].includes(typeName)) {
+                const priceInput = document.getElementById(`ticketPrice_${typeName}`);
+                const qtyInput = document.getElementById(`ticketQuantity_${typeName}`);
+                const descTextarea = document.querySelector(`textarea[name="ticketDescription_${typeName}"]`);
+                
             if (priceInput) priceInput.value = ticket.price || 0;
-            if (descTextarea) descTextarea.value = ticket.description || '';
             if (qtyInput) qtyInput.value = ticket.quantity || 0;
-            if (limitInput && ticket.saleLimit) {
-                const limitDate = new Date(ticket.saleLimit);
-                limitInput.value = formatDateTimeLocal(limitDate);
-            }
-            
-            // Cargar imagen del ticket si existe
-            if (ticket.image && ticketPreview) {
-                const img = document.createElement('img');
-                img.src = ticket.image;
-                img.className = 'preview-ticket-image';
-                img.alt = `Imagen de ticket ${ticket.type}`;
-                ticketPreview.innerHTML = '';
-                ticketPreview.appendChild(img);
+                if (descTextarea) descTextarea.value = ticket.description || '';
             }
         });
-    } else {
-        addTicketType();
     }
     
     // Guardar ID del evento para actualización
@@ -248,21 +251,9 @@ function formatDateTimeLocal(date) {
 
 // Inicializar formulario
 function initializeForm() {
-    // Solo agregar tipo de entrada si no hay ninguno
-    const container = document.getElementById('ticketTypesContainer');
-    if (container && container.children.length === 0) {
-        addTicketType();
-    }
-    
+    // Ya no necesitamos agregar tipos dinámicamente, están en el HTML
     // Configurar restricción de edad
-    const ageCheckbox = document.getElementById('ageRestriction');
-    const ageSelectWrapper = document.getElementById('ageSelectWrapper');
-    
-    if (ageCheckbox && ageSelectWrapper) {
-        ageCheckbox.addEventListener('change', function() {
-            ageSelectWrapper.style.display = this.checked ? 'block' : 'none';
-        });
-    }
+    setupAgeRestriction();
     
     // Configurar preview de fotos
     const photoInput = document.getElementById('eventPhotos');
@@ -293,12 +284,6 @@ function initializeForm() {
 
 // Configurar event listeners
 function setupEventListeners() {
-    // Botón agregar tipo de entrada
-    const addTicketTypeBtn = document.getElementById('addTicketTypeBtn');
-    if (addTicketTypeBtn) {
-        addTicketTypeBtn.addEventListener('click', addTicketType);
-    }
-    
     // Submit del formulario
     const form = document.getElementById('createEventForm');
     if (form) {
@@ -308,11 +293,72 @@ function setupEventListeners() {
     // Botón crear evento del header
     const registerBtn = document.getElementById('registerBtn');
     if (registerBtn) {
-        registerBtn.addEventListener('click', function() {
+        // Si estamos en la página de crear evento, deshabilitar el botón
+        if (window.location.pathname.includes('evento.html') || 
+            window.location.href.includes('evento.html')) {
+            registerBtn.style.opacity = '0.5';
+            registerBtn.style.cursor = 'not-allowed';
+            registerBtn.disabled = true;
+        } else {
+            registerBtn.addEventListener('click', function(e) {
             window.location.href = 'evento.html';
         });
     }
 }
+    
+    // Configurar restricción de edad (asegurar que funcione)
+    setupAgeRestriction();
+    
+    // Configurar cierre del modal
+    const modalClose = document.getElementById('modalClose');
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalClose) {
+        modalClose.addEventListener('click', closeEventModal);
+    }
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', closeEventModal);
+    }
+}
+
+// Configurar restricción de edad
+function setupAgeRestriction() {
+    const ageCheckbox = document.getElementById('ageRestriction');
+    const ageSelectWrapper = document.getElementById('ageSelectWrapper');
+    const minAgeSelect = document.getElementById('minAge');
+    
+    if (!ageCheckbox || !ageSelectWrapper || !minAgeSelect) {
+        // Si los elementos no existen, intentar de nuevo después de un breve delay
+        setTimeout(setupAgeRestriction, 200);
+        return;
+    }
+    
+    // Generar opciones de edad desde 12 a 30 años
+    minAgeSelect.innerHTML = '<option value="">Selecciona una edad</option>';
+    for (let age = 12; age <= 30; age++) {
+        const option = document.createElement('option');
+        option.value = age;
+        option.textContent = `${age} años`;
+        minAgeSelect.appendChild(option);
+    }
+    
+    // Función para mostrar/ocultar el selector
+    function toggleAgeSelect() {
+        toggleAgeRestrictionDisplay(ageCheckbox);
+    }
+    
+    // Agregar listeners adicionales (el onclick ya está en el HTML)
+    ageCheckbox.addEventListener('change', toggleAgeSelect);
+    ageCheckbox.addEventListener('click', toggleAgeSelect);
+    
+    // Verificar estado inicial
+    if (ageCheckbox.checked) {
+        ageSelectWrapper.style.display = 'block';
+        minAgeSelect.setAttribute('required', 'required');
+    }
+}
+
+// Hacer función disponible globalmente
+window.setupAgeRestriction = setupAgeRestriction;
 
 // Agregar tipo de entrada
 function addTicketType() {
@@ -392,6 +438,10 @@ function removeTicketType(button) {
     }
 }
 
+// Hacer funciones disponibles globalmente para onclick
+window.addTicketType = addTicketType;
+window.removeTicketType = removeTicketType;
+
 // Actualizar números de tipos de entrada
 function updateTicketTypeNumbers() {
     const ticketTypes = document.querySelectorAll('.ticket-type-item');
@@ -464,6 +514,21 @@ function handleTicketImagePreview(e, ticketIndex) {
 async function handleFormSubmit(e) {
     e.preventDefault();
     
+    // Verificar primero si el usuario tiene datos completos del organizador
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    const organizerData = JSON.parse(localStorage.getItem('organizerData') || 'null');
+    
+    if (!currentUser) {
+        showNotification('Debes iniciar sesión para crear un evento', 'error');
+        return;
+    }
+    
+    if (!organizerData || !organizerData.isComplete) {
+        showNotification('Debes completar tus datos de organizador antes de crear un evento', 'error');
+        showOrganizerDataForm();
+        return;
+    }
+    
     const form = e.target;
     const formData = new FormData(form);
     
@@ -475,30 +540,71 @@ async function handleFormSubmit(e) {
     // Obtener datos del formulario
     const eventData = collectFormData(formData);
     
-    // Validar tipos de entrada
+    // Validar tipos de entrada - al menos uno debe tener precio y cantidad
+    const ticketTypeNames = ['General', 'VIP', 'Familiar', 'Niños'];
+    let hasValidTicket = false;
+    
+    ticketTypeNames.forEach((typeName) => {
+        const price = parseFloat(formData.get(`ticketPrice_${typeName}`)) || 0;
+        const quantity = parseInt(formData.get(`ticketQuantity_${typeName}`)) || 0;
+        if (price > 0 && quantity > 0) {
+            hasValidTicket = true;
+        }
+    });
+    
+    if (!hasValidTicket) {
+        showNotification('Debes configurar al menos un tipo de entrada con precio y cantidad', 'error');
+        return;
+    }
+    
+    // Validar que collectFormData haya generado tickets válidos
     if (eventData.tickets.length === 0) {
-        showNotification('Debes agregar al menos un tipo de entrada', 'error');
+        showNotification('Debes configurar al menos un tipo de entrada con precio y cantidad', 'error');
         return;
     }
     
     // Verificar si estamos editando
-    const form = document.getElementById('createEventForm');
-    const eventId = form ? form.dataset.eventId : null;
+    const createEventForm = document.getElementById('createEventForm');
+    const eventId = createEventForm ? createEventForm.dataset.eventId : null;
     
     // Guardar o actualizar evento
     try {
         if (eventId) {
             await updateEvent(parseInt(eventId), eventData);
             showNotification('¡Evento actualizado exitosamente!', 'success');
+            // Redirigir después de un breve delay
+            setTimeout(() => {
+                window.location.href = 'mis-eventos.html';
+            }, 1500);
         } else {
             await saveEvent(eventData);
             showNotification('¡Evento creado exitosamente!', 'success');
-        }
-        
-        // Redirigir después de un breve delay
+            
+            // Deshabilitar el formulario y el botón del header para evitar que se vuelva a enviar
+            const form = document.getElementById('createEventForm');
+            if (form) {
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Evento Creado';
+                }
+                form.style.opacity = '0.6';
+                form.style.pointerEvents = 'none';
+            }
+            
+            // Deshabilitar también el botón "CREAR EVENTO" del header
+            const headerBtn = document.getElementById('registerBtn');
+            if (headerBtn) {
+                headerBtn.disabled = true;
+                headerBtn.style.opacity = '0.5';
+                headerBtn.style.cursor = 'not-allowed';
+            }
+            
+            // Redirigir a mis eventos (ya verificamos que tiene datos completos antes)
         setTimeout(() => {
             window.location.href = 'mis-eventos.html';
         }, 1500);
+        }
     } catch (error) {
         console.error('Error al guardar evento:', error);
         showNotification('Error al guardar el evento. Por favor, intenta nuevamente.', 'error');
@@ -538,29 +644,26 @@ function validateForm(formData) {
 function collectFormData(formData) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
     
-    // Obtener tipos de entrada
+    // Obtener tipos de entrada (General, VIP, Familiar, Niños)
     const tickets = [];
-    const ticketTypes = document.querySelectorAll('.ticket-type-item');
+    const ticketTypeNames = ['General', 'VIP', 'Familiar', 'Niños'];
     
-    ticketTypes.forEach((item, index) => {
-        const ticketIndex = index + 1;
-        const type = formData.get(`ticketType_${ticketIndex}`);
-        const price = parseFloat(formData.get(`ticketPrice_${ticketIndex}`));
-        const description = formData.get(`ticketDescription_${ticketIndex}`);
-        const quantity = parseInt(formData.get(`ticketQuantity_${ticketIndex}`));
-        const saleLimit = formData.get(`ticketSaleLimit_${ticketIndex}`);
-        const ticketImage = formData.get(`ticketImage_${ticketIndex}`);
+    ticketTypeNames.forEach((typeName) => {
+        const price = parseFloat(formData.get(`ticketPrice_${typeName}`)) || 0;
+        const quantity = parseInt(formData.get(`ticketQuantity_${typeName}`)) || 0;
+        const description = formData.get(`ticketDescription_${typeName}`) || '';
         
-        if (type && !isNaN(price) && description && quantity && saleLimit) {
+        // Solo agregar si tiene precio y cantidad (al menos uno debe estar configurado)
+        if (price > 0 && quantity > 0) {
             tickets.push({
-                type: type,
+                type: typeName,
                 price: price,
-                description: description,
+                description: description || `Entrada tipo ${typeName}`,
                 quantity: quantity,
                 available: quantity,
                 sold: 0,
-                saleLimit: saleLimit,
-                image: ticketImage ? URL.createObjectURL(ticketImage) : null
+                saleLimit: formData.get('endDate') || new Date().toISOString(),
+                image: null
             });
         }
     });
@@ -731,8 +834,352 @@ function showNotification(message, type = 'info') {
         // Llamar a la función global original
         window.showNotification(message, type);
     } else {
-        // Fallback a alert si no hay función global disponible
-        alert(message);
+        // Fallback con el mismo estilo de la web si no hay función global disponible
+        const notification = document.createElement('div');
+        const bgColor = type === 'success' ? '#6DCB5A' : type === 'error' ? '#ef4444' : '#2C8CFB';
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            background: ${bgColor};
+            color: #121212;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            z-index: 9999;
+            animation: slideIn 0.3s ease-out;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 400px;
+        `;
+        
+        const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+        notification.innerHTML = `<span style="font-size: 20px;">${icon}</span><span>${message}</span>`;
+        
+        document.body.appendChild(notification);
+        
+        // Asegurar que las animaciones CSS estén disponibles
+        if (!document.getElementById('notification-styles')) {
+            const style = document.createElement('style');
+            style.id = 'notification-styles';
+            style.textContent = `
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                
+                @keyframes slideOut {
+                    from {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease-out';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     }
 }
+
+// Cerrar modal de evento
+function closeEventModal() {
+    const modal = document.getElementById('eventModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+    
+    // Restaurar visibilidad del formulario de creación de eventos
+    const createEventForm = document.getElementById('createEventForm');
+    const createEventMain = document.querySelector('.create-event-main');
+    if (createEventForm) {
+        createEventForm.style.display = '';
+    }
+    if (createEventMain) {
+        createEventMain.style.display = '';
+    }
+    
+    // Habilitar el botón "CREAR EVENTO" del header si estamos en evento.html
+    const registerBtn = document.getElementById('registerBtn');
+    if (registerBtn && (window.location.pathname.includes('evento.html') || 
+        window.location.href.includes('evento.html'))) {
+        registerBtn.disabled = false;
+        registerBtn.style.opacity = '1';
+        registerBtn.style.cursor = 'pointer';
+    }
+}
+
+// Mostrar formulario de datos del organizador
+function showOrganizerDataForm() {
+    const modal = document.getElementById('eventModal');
+    const modalBody = document.getElementById('modalBody');
+    
+    if (!modal || !modalBody) {
+        // Si no hay modal, redirigir a una página dedicada o mostrar en la misma página
+        window.location.href = 'datos-organizador.html?fromEvent=true';
+        return;
+    }
+    
+    // Ocultar el formulario de creación de eventos mientras se muestra el modal
+    const createEventForm = document.getElementById('createEventForm');
+    const createEventMain = document.querySelector('.create-event-main');
+    if (createEventForm) {
+        createEventForm.style.display = 'none';
+    }
+    if (createEventMain) {
+        createEventMain.style.display = 'none';
+    }
+    
+    // Cargar datos existentes si hay
+    const existingData = JSON.parse(localStorage.getItem('organizerData') || 'null');
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    
+    modalBody.innerHTML = `
+        <div class="event-detail-content" style="padding: 40px; max-width: 800px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 32px;">
+                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: white; font-size: 40px;">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h2 style="margin-bottom: 8px;">Completa tus Datos de Organizador</h2>
+                <p style="color: var(--text-secondary);">Para recibir pagos y gestionar tus eventos, necesitamos completar tu información</p>
+            </div>
+            
+            <form id="organizerDataForm" onsubmit="submitOrganizerData(event)">
+                <!-- Datos Personales Completos -->
+                <div class="form-section" style="margin-bottom: 32px;">
+                    <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-user" style="color: var(--primary-color);"></i>
+                        Datos Personales
+                    </h3>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                        <div class="form-group">
+                            <label>Nombre Completo <span class="required">*</span></label>
+                            <input type="text" name="fullName" required value="${existingData?.fullName || currentUser?.name || ''}" placeholder="Juan Pérez">
+                        </div>
+                        <div class="form-group">
+                            <label>DNI/CUIL <span class="required">*</span></label>
+                            <input type="text" name="dni" required value="${existingData?.dni || ''}" placeholder="12345678" maxlength="11">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                        <div class="form-group">
+                            <label>Teléfono <span class="required">*</span></label>
+                            <input type="tel" name="phone" required value="${existingData?.phone || currentUser?.phone || ''}" placeholder="+54 9 11 1234-5678">
+                        </div>
+                        <div class="form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" name="email" required value="${existingData?.email || currentUser?.email || ''}" placeholder="email@ejemplo.com" readonly style="background: var(--input-bg); opacity: 0.7;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label>Dirección Completa <span class="required">*</span></label>
+                        <input type="text" name="address" required value="${existingData?.address || ''}" placeholder="Calle, Número, Piso, Departamento">
+                    </div>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label>Provincia <span class="required">*</span></label>
+                            <select name="province" required>
+                                <option value="">Selecciona</option>
+                                <option value="Chaco" ${existingData?.province === 'Chaco' ? 'selected' : ''}>Chaco</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Localidad <span class="required">*</span></label>
+                            <input type="text" name="locality" required value="${existingData?.locality || ''}" placeholder="Ciudad">
+                        </div>
+                        <div class="form-group">
+                            <label>Código Postal <span class="required">*</span></label>
+                            <input type="text" name="postalCode" required value="${existingData?.postalCode || ''}" placeholder="3500" maxlength="8">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Datos Bancarios -->
+                <div class="form-section" style="margin-bottom: 32px;">
+                    <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-university" style="color: var(--secondary-color);"></i>
+                        Datos Bancarios
+                    </h3>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                        <div class="form-group">
+                            <label>Tipo de Cuenta <span class="required">*</span></label>
+                            <select name="accountType" required>
+                                <option value="">Selecciona</option>
+                                <option value="Caja de Ahorro" ${existingData?.accountType === 'Caja de Ahorro' ? 'selected' : ''}>Caja de Ahorro</option>
+                                <option value="Cuenta Corriente" ${existingData?.accountType === 'Cuenta Corriente' ? 'selected' : ''}>Cuenta Corriente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Banco <span class="required">*</span></label>
+                            <input type="text" name="bankName" required value="${existingData?.bankName || ''}" placeholder="Nombre del banco">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                        <div class="form-group">
+                            <label>CBU/Alias <span class="required">*</span></label>
+                            <input type="text" name="cbu" required value="${existingData?.cbu || ''}" placeholder="CBU o Alias" maxlength="22">
+                            <small style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; display: block;">Ingresa tu CBU (22 dígitos) o Alias</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Número de Cuenta</label>
+                            <input type="text" name="accountNumber" value="${existingData?.accountNumber || ''}" placeholder="Opcional">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Titular de la Cuenta <span class="required">*</span></label>
+                        <input type="text" name="accountHolder" required value="${existingData?.accountHolder || existingData?.fullName || currentUser?.name || ''}" placeholder="Nombre del titular">
+                    </div>
+                </div>
+                
+                <!-- Información Adicional -->
+                <div class="form-section" style="margin-bottom: 32px;">
+                    <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-info-circle" style="color: var(--primary-color);"></i>
+                        Información Adicional
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label>Tipo de Organizador</label>
+                        <select name="organizerType" onchange="toggleCompanyData(this)">
+                            <option value="">Selecciona</option>
+                            <option value="Persona Física" ${existingData?.organizerType === 'Persona Física' ? 'selected' : ''}>Persona Física</option>
+                            <option value="Persona Jurídica" ${existingData?.organizerType === 'Persona Jurídica' ? 'selected' : ''}>Persona Jurídica</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="companyDataWrapper" style="display: ${existingData?.organizerType === 'Persona Jurídica' ? 'block' : 'none'};">
+                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="form-group">
+                                <label>Razón Social</label>
+                                <input type="text" name="companyName" value="${existingData?.companyName || ''}" placeholder="Nombre de la empresa">
+                            </div>
+                            <div class="form-group">
+                                <label>CUIT</label>
+                                <input type="text" name="cuit" value="${existingData?.cuit || ''}" placeholder="20-12345678-9" maxlength="13">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 32px;">
+                    <button type="submit" class="btn-primary" style="padding: 12px 32px; width: 100%;">
+                        <i class="fas fa-save"></i>
+                        Guardar Datos y Continuar
+                    </button>
+                </div>
+                <p style="text-align: center; color: var(--text-secondary); font-size: 13px; margin-top: 16px;">
+                    <i class="fas fa-info-circle"></i> Estos datos son obligatorios para crear eventos y recibir pagos
+                </p>
+            </form>
+        </div>
+    `;
+    
+    modal.classList.add('active');
+}
+
+// Toggle para mostrar/ocultar datos de empresa
+function toggleCompanyData(select) {
+    const companyWrapper = document.getElementById('companyDataWrapper');
+    if (companyWrapper) {
+        companyWrapper.style.display = select.value === 'Persona Jurídica' ? 'block' : 'none';
+    }
+}
+
+// Enviar datos del organizador
+function submitOrganizerData(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    const organizerData = {
+        fullName: formData.get('fullName'),
+        dni: formData.get('dni'),
+        phone: formData.get('phone'),
+        email: formData.get('email'),
+        address: formData.get('address'),
+        province: formData.get('province'),
+        locality: formData.get('locality'),
+        postalCode: formData.get('postalCode'),
+        accountType: formData.get('accountType'),
+        bankName: formData.get('bankName'),
+        cbu: formData.get('cbu'),
+        accountNumber: formData.get('accountNumber') || '',
+        accountHolder: formData.get('accountHolder'),
+        organizerType: formData.get('organizerType') || 'Persona Física',
+        companyName: formData.get('companyName') || '',
+        cuit: formData.get('cuit') || '',
+        isComplete: true,
+        completedAt: new Date().toISOString()
+    };
+    
+    // Validaciones básicas
+    if (!organizerData.fullName || !organizerData.dni || !organizerData.phone || !organizerData.email) {
+        showNotification('Por favor completa todos los campos obligatorios', 'error');
+        return;
+    }
+    
+    if (!organizerData.accountType || !organizerData.bankName || !organizerData.cbu || !organizerData.accountHolder) {
+        showNotification('Por favor completa todos los datos bancarios obligatorios', 'error');
+        return;
+    }
+    
+    // Guardar datos del organizador
+    localStorage.setItem('organizerData', JSON.stringify(organizerData));
+    
+    // Actualizar datos del usuario si es necesario
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    if (currentUser) {
+        currentUser.phone = organizerData.phone;
+        currentUser.fullName = organizerData.fullName;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    }
+    
+    showNotification('¡Datos guardados exitosamente!', 'success');
+    
+    // Cerrar el modal (esto restaurará el formulario automáticamente)
+    closeEventModal();
+    
+    // Inicializar el formulario de eventos ahora que tiene los datos completos
+    initializeForm();
+    setupEventListeners();
+    
+    showNotification('Ahora puedes crear tu evento', 'success');
+}
+
+// Omitir completar datos (completar más tarde) - NO PERMITIDO
+function skipOrganizerData() {
+    showNotification('Debes completar tus datos de organizador para crear eventos. Es obligatorio.', 'error');
+    // No permitir cerrar el modal sin completar los datos
+    return;
+}
+
+// Hacer funciones disponibles globalmente
+window.showOrganizerDataForm = showOrganizerDataForm;
+window.submitOrganizerData = submitOrganizerData;
+window.skipOrganizerData = skipOrganizerData;
+window.toggleCompanyData = toggleCompanyData;
 
