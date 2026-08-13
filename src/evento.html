@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Evento - PassTo</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="estilos-eventos.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/estilos-eventos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="logoopassto.svg" type="image/svg+xml">
+    <link rel="icon" href="../logoopassto.svg" type="image/svg+xml">
 </head>
 <body>
     <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="nav-wrapper">
-                <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-                    <img src="logoopassto.svg" alt="PassTo Logo" class="logo-character">
+                <div class="logo" onclick="window.location.href='../index.html'" style="cursor: pointer;">
+                    <img src="../logoopassto.svg" alt="PassTo Logo" class="logo-character">
                     <span>PassTo<sup></sup></span>
                 </div>
                 <nav class="nav-menu" id="navMenu">
-                    <a href="index.html" class="nav-link" data-page="index">Inicio</a>
+                    <a href="../index.html" class="nav-link" data-page="index">Inicio</a>
                     <a href="#" class="nav-link" data-page="tickets">Mis Tickets</a>
                     <a href="historia.html" class="nav-link" data-page="historia">Historia</a>
                     <a href="mis-eventos.html" class="nav-link" id="misEventosLink" data-page="mis-eventos" style="display: none;">Mis Eventos</a>
@@ -68,7 +68,7 @@
         </div>
         <div class="hamburger-menu-content">
             <div class="hamburger-menu-item">
-                <a href="index.html" onclick="closeHamburgerMenu(); return true;">
+                <a href="../index.html" onclick="closeHamburgerMenu(); return true;">
                     <i class="fas fa-home"></i>
                     <span>Inicio</span>
                 </a>
@@ -409,7 +409,7 @@
 
                 <!-- Form Actions -->
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="window.location.href='index.html'">
+                    <button type="button" class="btn-secondary" onclick="window.location.href='../index.html'">
                         <i class="fas fa-times"></i>
                         Cancelar
                     </button>
@@ -446,7 +446,7 @@
             <div class="footer-main">
                 <div class="footer-about">
                     <div class="footer-logo">
-                        <img src="logoopassto.svg" alt="PassTo Logo" class="footer-logo-character">
+                        <img src="../logoopassto.svg" alt="PassTo Logo" class="footer-logo-character">
                         <span>PassTo</span>
                     </div>
                     <p class="footer-tagline">Tu pase a experiencias inolvidables. Descubre y compra entradas para los mejores eventos de tu ciudad.</p>
@@ -474,8 +474,8 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
-    <script src="evento.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/evento.js"></script>
     <script>
         // Asegurar que la función esté disponible y configurar el selector de edad
         (function() {

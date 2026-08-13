@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PassTo - Encuentra tus Eventos Favoritos</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="logoopassto.svg" type="image/svg+xml">
 </head>
@@ -12,7 +12,7 @@
     <!-- Splash Screen -->
     <div id="splashScreen" class="splash-screen">
         <div class="splash-content">
-        <div class="splash-animation-wrapper">
+                <div class="splash-animation-wrapper">
             <video class="splash-animation" autoplay muted playsinline loop>
                 <source src="passto-animation.mp4" type="video/mp4">
                 Tu navegador no soporta reproducción de video.
@@ -33,9 +33,9 @@
                 </div>
                 <nav class="nav-menu" id="navMenu">
                     <a href="index.html" class="nav-link" data-page="index">Inicio</a>
-                    <a href="#" class="nav-link" data-page="tickets">Mis Tickets</a> 
-                    <a href="historia.html" class="nav-link" data-page="historia">Historia</a>
-                    <a href="mis-eventos.html" class="nav-link" id="misEventosLink" data-page="mis-eventos" style="display: none;">Mis Eventos</a>
+                    <a href="src/mistickets.html" class="nav-link" data-page="tickets">Mis Tickets</a> 
+                    <a href="src/historia.html" class="nav-link" data-page="historia">Historia</a>
+                    <a href="src/mis-eventos.html" class="nav-link" id="misEventosLink" data-page="mis-eventos" style="display: none;">Mis Eventos</a>
                 </nav>
                 <div class="nav-actions">
                     <button class="icon-btn cart-btn" id="cartBtn">
@@ -86,19 +86,19 @@
                 </a>
             </div>
             <div class="hamburger-menu-item">
-                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){window.location.href='mistickets.html';}else{showAuthModal('login');} return false;">
+                <a href="#" onclick="closeHamburgerMenu(); if(currentUser){window.location.href='src/mistickets.html';}else{showAuthModal('login');} return false;">
                     <i class="fas fa-ticket"></i>
                     <span>Mis Tickets</span>
                 </a>
             </div>
             <div class="hamburger-menu-item">
-                <a href="historia.html" onclick="closeHamburgerMenu(); return true;">
+                <a href="src/historia.html" onclick="closeHamburgerMenu(); return true;">
                     <i class="fas fa-book"></i>
                     <span>Historia</span>
                 </a>
             </div>
             <div class="hamburger-menu-item" id="hamburgerMisEventosItem" style="display: none;">
-                <a href="mis-eventos.html" onclick="closeHamburgerMenu(); return true;">
+                <a href="src/mis-eventos.html" onclick="closeHamburgerMenu(); return true;">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Mis Eventos</span>
                 </a>
@@ -405,7 +405,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
 

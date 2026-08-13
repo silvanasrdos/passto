@@ -384,7 +384,7 @@ function showTicketModal(ticket) {
         <div class="ticket-modal-wrapper">
             <div class="ticket-modal-header" style="${isCancelled ? 'background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);' : ''}">
                 <div class="ticket-modal-logo">
-                    <img src="logoopassto.svg" alt="PassTo Logo" class="ticket-logo-img">
+                    <img src="../logoopassto.svg" alt="PassTo Logo" class="ticket-logo-img">
                     <span class="ticket-logo-text">PassTo<sup></sup></span>
                 </div>
                 ${isCancelled ? `
